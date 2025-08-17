@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../data/models/system.dart';
-import '../../data/services/get/get_system.dart';
+import '../../../data/models/system.dart';
+import '../../../data/services/get/get_system.dart';
 
 class SystemCacheProvider with ChangeNotifier {
   bool isInitialized = false;
@@ -17,7 +17,6 @@ class SystemCacheProvider with ChangeNotifier {
   Future<void> run() async{
     if (isInitialized) return;
     _system = await GetSystem.get();
-    // print('OII');
     isInitialized = true;
   }
 

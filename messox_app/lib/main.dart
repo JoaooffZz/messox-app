@@ -3,8 +3,8 @@ import 'package:hive/hive.dart';
 import 'package:messox_app/core/constants/name_boxes.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'presentation/providers/system_cache_provider.dart';
-import 'presentation/providers/web_socket_provider.dart';
+import 'presentation/providers/caches/system_cache_provider.dart';
+import 'presentation/providers/connections/web_socket_provider.dart';
 import 'presentation/screens/access/access_screen.dart';
 import 'presentation/screens/form_server/form_server_screen.dart';
 import 'package:provider/provider.dart';

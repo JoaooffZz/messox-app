@@ -6,7 +6,8 @@ import '../../../core/constants/lottie_fox.dart';
 import '../../blocs/pre_loading/pre_loading_bloc.dart';
 import '../../blocs/pre_loading/pre_loading_events.dart';
 import '../../blocs/pre_loading/pre_loading_state.dart';
-import '../../providers/system_cache_provider.dart';
+import '../../providers/caches/system_cache_provider.dart';
+import '../../routes/pre_loading.dart';
 import 'transparent_loop_animation.dart';
 
 class PreLoading extends StatefulWidget{
@@ -71,6 +72,22 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
       stream: _preLoadBloc.outputState,
       builder: (context, snapshot) {
         final state = snapshot.data;
+
+        if (state is GoServer) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            RoutesPreLoading.goServer(context);
+          });
+        }
+        if (state is GoAcess) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            RoutesPreLoading.goAcess(context);
+          });
+        }
+        if (state is GoHome) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            RoutesPreLoading.goHome(context);
+          });
+        }
 
         if (state is Loaded && !isLoaded) {
           isLoaded = true;
