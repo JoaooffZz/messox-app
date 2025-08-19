@@ -96,14 +96,13 @@ class _AccessScreen extends State<AccessScreen>
               ),
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
             Align(
-              // Alignment(-0.4, 0),
-              alignment: _isLogin? Alignment(-0.4, 0) : Alignment(-0.75, 0),
+              alignment: _isLogin? Alignment(-0.4, 0) : Alignment(-0.60, 0),
               child:FadeSlideText(
                 text: _isLogin
                     ? 'Bem vindo Usuario'
-                    : 'Bem vindo\nnovo usuario',
+                    : 'Bem vindo novo\nusuario',
                 controller: textFadeControl,
                 textStyle: TextStyle(
                   color: _isLogin
@@ -117,7 +116,7 @@ class _AccessScreen extends State<AccessScreen>
             ),
             const SizedBox(height: 5),
             Align(
-              alignment: const Alignment(-0.5, 0),
+              alignment: const Alignment(-0.4, 0),
               child: FadeSlideText(
                 text: _isLogin
                     ? 'Insira suas credencias de acesso'
@@ -133,6 +132,7 @@ class _AccessScreen extends State<AccessScreen>
                 ),
               ),
             ),
+            const SizedBox(height: 10),
 
             SizedBox(height: _isLogin? 60 : 14),
 
@@ -193,7 +193,30 @@ class _AccessScreen extends State<AccessScreen>
               ),
             ),
 
-            SizedBox(height: heightMQ * 0.30),
+            SizedBox(height: heightMQ * 0.25),
+
+            TextButton(
+              onPressed: () {
+                // ação aqui
+              },
+              style: const ButtonStyle(
+                overlayColor: MaterialStatePropertyAll(Colors.transparent),
+                splashFactory: NoSplash.splashFactory,
+                padding: MaterialStatePropertyAll(EdgeInsets.zero),
+                minimumSize: MaterialStatePropertyAll(Size.zero),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                foregroundColor: MaterialStatePropertyAll(Color(0xFF007E42)),
+              ),
+              child: const Text(
+                'alterar servidor',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF007E42),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 25),
 
             ButtonGo(
               height: heightMQ * 0.07,

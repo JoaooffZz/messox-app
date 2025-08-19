@@ -57,9 +57,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: AccessScreen(),
+      home: AccessScreen(),
       // home: FormServerScreen()
-      home: PreLoading()
+      // home: PreLoading()
     );
   }
 }

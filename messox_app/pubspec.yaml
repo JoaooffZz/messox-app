@@ -65,12 +65,14 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    # svgs
     - assets/svgs/user.svg
     - assets/svgs/user-add.svg
     - assets/svgs/password.svg
     - assets/svgs/server.svg
     - assets/svgs/host.svg
     - assets/svgs/schema.svg
+    - assets/svgs/api-key.svg
     # lotties
     - assets/lotties/chat-black.json
     - assets/lotties/settings-black.json

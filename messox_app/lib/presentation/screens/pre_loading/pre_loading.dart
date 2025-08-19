@@ -28,7 +28,7 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
   void _setupAnimationController() {
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 450),
     );
 
     _controller.addStatusListener((status) {
@@ -36,6 +36,7 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
         _controller.reverse(); // vai para trás
       } else if (status == AnimationStatus.dismissed) {
         _controller.forward(); // vai para frente
+        // curiosityFox = curiositiesFoxGet();
         setState(() {
           curiosityFox = curiositiesFoxGet();
         });

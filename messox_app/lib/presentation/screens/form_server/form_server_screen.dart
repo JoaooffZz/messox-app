@@ -6,44 +6,50 @@ import '../../widgets/fade_text.dart';
 import '../../widgets/form_acess.dart';
 import '../../widgets/button_go.dart';
 
-class FormServerScreen extends StatefulWidget{
+class FormServerScreen extends StatefulWidget {
   const FormServerScreen({super.key});
 
   @override
   State<FormServerScreen> createState() => _FormServerScreen();
 }
 
-class _FormServerScreen extends State<FormServerScreen> with SingleTickerProviderStateMixin{
+class _FormServerScreen extends State<FormServerScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController textFadeControl;
 
-  late GlobalKey<FormState> formKeyNameServ;
-  late TextEditingController formNameServControl;
+  late GlobalKey<FormState> keyName;
+  late TextEditingController controlName;
 
-  late GlobalKey<FormState> formKeyHostServ;
-  late TextEditingController formHostServControl;
+  late GlobalKey<FormState> keyHost;
+  late TextEditingController controlHost;
 
-  late GlobalKey<FormState> formKeySchemaServ;
-  late TextEditingController formSchemaServControl;
+  late GlobalKey<FormState> keySchema;
+  late TextEditingController controlSchema;
+
+  late GlobalKey<FormState> keyApiKey;
+  late TextEditingController controlApiKey;
 
   @override
   void initState() {
     // fade text
     textFadeControl = AnimationController(
-      vsync: this, 
-      duration: const Duration(milliseconds: 700)
-    );
+        vsync: this, duration: const Duration(milliseconds: 2000));
 
     // form name server
-    formKeyNameServ = GlobalKey<FormState>();
-    formNameServControl = TextEditingController();
+    keyName = GlobalKey<FormState>();
+    controlName = TextEditingController();
 
     // form host server
-    formKeyHostServ = GlobalKey<FormState>();
-    formHostServControl = TextEditingController();
+    keyHost = GlobalKey<FormState>();
+    controlHost = TextEditingController();
 
-    // form host server
-    formKeySchemaServ = GlobalKey<FormState>();
-    formSchemaServControl = TextEditingController();
+    // form schema server
+    keySchema = GlobalKey<FormState>();
+    controlSchema = TextEditingController();
+
+    // form api key
+    keyApiKey = GlobalKey<FormState>();
+    controlApiKey = TextEditingController();
 
     super.initState();
   }
@@ -52,129 +58,133 @@ class _FormServerScreen extends State<FormServerScreen> with SingleTickerProvide
   Widget build(BuildContext context) {
     final widthMQ = MediaQuery.of(context).size.width;
     final heightMQ = MediaQuery.of(context).size.height;
+    final viewInsets = MediaQuery.of(context).viewInsets.bottom;
+
     return Container(
-      color: Color(0xff65FFBB),
+      color: const Color(0xff65FFBB),
       alignment: Alignment.center,
-      padding: EdgeInsets.only(left: 7, right: 7, top: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 25),
       child: SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: viewInsets),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FadeSlideText(
-              text: 'Preencha os dados', 
-              controller: textFadeControl, 
-              textStyle: TextStyle(
-                color: Color(0xff262527),
-                fontSize: 38,
-                fontFamily: 'RadioCanada',
-                fontWeight: FontWeight.w700
-              )
-            ),
-            Align(
-              alignment: Alignment(-0.73, 0),
-              child:FadeSlideText(
-                text: 'do servidor', 
-                controller: textFadeControl, 
-                textStyle: TextStyle(
-                  color: Color(0xff262527),
-                  fontSize: 32,
-                  fontFamily: 'RadioCanada',
-                  fontWeight: FontWeight.w700
-                )
-              )
-            ),
-
-            SizedBox(height: heightMQ * 0.15),
-
-            Material(
-              color: Colors.transparent, // Material transparente
+            SafeArea(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  FormAcess(
-                    height: heightMQ * 0.08,
-                    width: widthMQ * 0.9,
-                    formKey: formKeyNameServ,
-                    controller: formNameServControl,
-                    svg: SvgPicture.asset(
-                      'assets/svgs/server.svg',
-                      height: 28,
-                      width: 28,
-                    ),
-                    colorForm: const Color(0xff86868A),
-                    colorBoxShadow: const Color(0xff444446),
-                    labelText: 'Nome',
-                    labelStyle: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xffFFFFFF),
+                  FadeSlideText(
+                    text: 'Preencha os dados',
+                    controller: textFadeControl,
+                    textStyle: const TextStyle(
+                      color: Color(0xff262527),
+                      fontSize: 38,
                       fontFamily: 'RadioCanada',
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  FormAcess(
-                    height: heightMQ * 0.08,
-                    width: widthMQ * 0.9,
-                    formKey: formKeyHostServ,
-                    controller: formHostServControl,
-                    svg: SvgPicture.asset(
-                      'assets/svgs/host.svg',
-                      height: 28,
-                      width: 28,
-                    ),
-                    colorForm: const Color(0xff86868A),
-                    colorBoxShadow: const Color(0xff444446),
-                    labelText: 'Host',
-                    labelStyle: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xffFFFFFF),
+                  FadeSlideText(
+                    text: 'do servidor',
+                    controller: textFadeControl,
+                    textStyle: const TextStyle(
+                      color: Color(0xff262527),
+                      fontSize: 34,
                       fontFamily: 'RadioCanada',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  FormAcess(
-                    height: heightMQ * 0.08,
-                    width: widthMQ * 0.9,
-                    formKey: formKeySchemaServ,
-                    controller: formSchemaServControl,
-                    svg: SvgPicture.asset(
-                      'assets/svgs/schema.svg',
-                      height: 28,
-                      width: 28,
-                    ),
-                    colorForm: const Color(0xff86868A),
-                    colorBoxShadow: const Color(0xff444446),
-                    labelText: 'Schema',
-                    labelStyle: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xffFFFFFF),
-                      fontFamily: 'RadioCanada',
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
               ),
             ),
 
-            SizedBox(height: heightMQ * 0.25),
+            SizedBox(height: heightMQ * 0.12),
 
-            ButtonGo(
-              height: heightMQ * 0.07,
-              width: widthMQ * 0.5,
-              colorBrightBackground: Color(0xff3C3C3D),
-              text: 'Connectar',
-              style: TextStyle(
-                fontSize: 20,
-                color: Color(0xff3C3C3D),
-                fontFamily: 'RadioCanada',
-                fontWeight: FontWeight.w600
+            Material(
+              color: Colors.transparent,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _form(
+                    heightMQ * 0.08,
+                    widthMQ * 0.9,
+                    'assets/svgs/server.svg',
+                    'Nome *',
+                    keyName,
+                    controlName,
+                  ),
+                  const SizedBox(height: 20),
+                  _form(
+                    heightMQ * 0.08,
+                    widthMQ * 0.9,
+                    'assets/svgs/host.svg',
+                    'Host *',
+                    keyHost,
+                    controlHost,
+                  ),
+                  const SizedBox(height: 20),
+                  _form(
+                    heightMQ * 0.08,
+                    widthMQ * 0.9,
+                    'assets/svgs/schema.svg',
+                    'Schema *',
+                    keySchema,
+                    controlSchema,
+                  ),
+                  const SizedBox(height: 20),
+                  _form(
+                    heightMQ * 0.08,
+                    widthMQ * 0.9,
+                    'assets/svgs/api-key.svg',
+                    'Api-key',
+                    keyApiKey,
+                    controlApiKey,
+                  ),
+                ],
               ),
-              onTap: () => {},
+            ),
+
+            SizedBox(height: heightMQ * 0.12),
+
+            SafeArea(
+              child: ButtonGo(
+                height: heightMQ * 0.07,
+                width: widthMQ * 0.5,
+                colorBrightBackground: const Color(0xff3C3C3D),
+                text: 'Connectar',
+                style: const TextStyle(
+                    fontSize: 20,
+                    color: Color(0xff3C3C3D),
+                    fontFamily: 'RadioCanada',
+                    fontWeight: FontWeight.w600),
+                onTap: () => {},
+              ),
             )
           ],
         ),
+      ),
+    );
+  }
+
+  FormAcess _form(double height, double width, String svg, String name,
+      GlobalKey<FormState> key, TextEditingController control) {
+    return FormAcess(
+      height: height,
+      width: width,
+      formKey: key,
+      controller: control,
+      svg: SvgPicture.asset(
+        svg,
+        height: 28,
+        width: 28,
+      ),
+      colorForm: const Color(0xff86868A),
+      colorBoxShadow: const Color(0xff444446),
+      labelText: name,
+      labelStyle: const TextStyle(
+        fontSize: 14,
+        color: Color(0xffFFFFFF),
+        fontFamily: 'RadioCanada',
+        fontWeight: FontWeight.w600,
       ),
     );
   }
