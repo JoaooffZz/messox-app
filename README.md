@@ -1,31 +1,35 @@
 ## 🧩 Arquitetura
 ```plaintext
 lib/
-├── main.dart               # main app
-├── core/                   # Código compartilhado e configurações gerais
-│   ├── constants/          # Constantes (cores, strings, etc)
-│   ├── utils/              # Funções utilitárias
-|   ├── colors/             # Cores das telas que não seguem tema.
-│   └── theme/              # Temas e estilos
+├── main.dart                 # Ponto de entrada do app
 │
-├── data/                   # Camada de dados
-│   ├── database/           # Banco de dados local
-│   ├── repositories/       # Interface de comunicação com banco de dados
-│   └── models/             # Modelos de dados local
+├── core/                     # Código compartilhado e configs globais
+│   ├── constants/            # Constantes (box names, svgs, lotties, etc.)
+│   ├── language/             # Construtor/mapeamento de textos do app
+│   ├── colors/               # Definição de cores (fixas e dinâmicas)
+│   ├── texts/                # Modelos de textos do app
+│   └── theme/                # Temas do app
 │
-├── server/                 # Camada de comunicação com servidor
-│   ├── services/           # Entidades de servicos (comunicação com api)
-│   ├── repositories/       # Interface de comunicação com a api 
-│   ├── models/             # Entidades de dados da requisição  
-│   ├── https/              # Interface de comunicação http
-│   ├── uris/               # Entidades de build do schema http
-│   └── bodys/              # Entidades de corpos de requisição
+├── data/                     # Camada de dados (local)
+│   ├── services/             # Serviços de comunicação com DB local
+│   └── models/               # Modelos de dados locais
 │
-├── presentation/           # UI e gerenciamento de estado
-│   ├── blocs/              # BLoCs ou Cubits
-│   ├── providers/          # Providers para gerenciamento de estado
-│   ├── screens/            # Telas (pages)
-│   ├── widgets/            # Widgets reutilizáveis
-│   └── routes/             # Gerenciamento de rotas
+├── server/                   # Camada de comunicação com servidor
+│   ├── api/                  # Caixa de ferramentas de requisições HTTP
+│   │   ├── https/            # Cliente HTTP
+│   │   ├── uris/             # Builders de URIs/endpoints
+│   │   ├── headers/          # Builders de headers
+│   │   └── bodys/            # Builders de request bodies
+│   ├── services/             # Serviços externos (API)
+│   ├── repositories/         # Repositórios (interface p/ API)
+│   ├── models/               # Modelos de dados da API
+│   └── errors/               # Tratamento de erros do servidor
+│
+├── presentation/             # UI + gerenciamento de estado
+│   ├── blocs/                # Gerenciamento de estado com BLoC/Cubit
+│   ├── providers/            # Providers (alternativa ou suporte ao BLoC)
+│   ├── screens/              # Telas (pages do app)
+│   ├── components/           # Componentes reutilizáveis
+│   └── routes/               # Configuração e gerenciamento de rotas
 ```
 
