@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../widgets/fade_text.dart';
-import '../../widgets/form_acess.dart';
-import '../../widgets/button_go.dart';
+import '../../components/ui/fade_text.dart';
+import '../../components/form_acess.dart';
+import '../../components/button_go.dart';
 
 class FormServerScreen extends StatefulWidget {
   const FormServerScreen({super.key});

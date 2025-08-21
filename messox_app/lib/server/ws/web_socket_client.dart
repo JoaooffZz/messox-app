@@ -5,7 +5,7 @@ class WebSocketClient {
 
   // WebSocketClient({required this.uri});
 
-  static IO.Socket run() {
+  static IO.Socket get() {
     return IO.io(
       'http://localhost:3000',
       IO.OptionBuilder()

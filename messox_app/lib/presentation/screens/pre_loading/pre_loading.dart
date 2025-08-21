@@ -6,7 +6,7 @@ import '../../../core/constants/lottie_fox.dart';
 import '../../blocs/pre_loading/pre_loading_bloc.dart';
 import '../../blocs/pre_loading/pre_loading_events.dart';
 import '../../blocs/pre_loading/pre_loading_state.dart';
-import '../../providers/caches/system_cache_provider.dart';
+import '../../providers/caches/system.dart';
 import '../../routes/pre_loading.dart';
 import 'transparent_loop_animation.dart';
 
@@ -106,7 +106,7 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
   Widget body(double heightMQ, double widthMQ) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xff65ffbb),
+        // color: Color(0xff65ffbb),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,

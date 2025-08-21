@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../core/colors/colors_acess_screen.dart';
-import '../../widgets/double_toggle_carousel.dart';
+// import '../../../core/colors/colors_acess_screen.dart';
+import '../../components/double_toggle_carousel.dart';
 import 'animated_weight_text.dart';
-import '../../widgets/fade_text.dart';
-import '../../widgets/button_go.dart';
-import '../../widgets/form_acess.dart';
+import '../../components/ui/fade_text.dart';
+import '../../components/button_go.dart';
+import '../../components/form_acess.dart';
 
 class AccessScreen extends StatefulWidget {
   const AccessScreen({super.key});
@@ -17,7 +17,7 @@ class AccessScreen extends StatefulWidget {
 
 class _AccessScreen extends State<AccessScreen>
     with SingleTickerProviderStateMixin {
-  final colors = ColorsAccessScreen;
+  // final colors = ColorsAccessScreen;
   bool _isLogin = true;
 
   late AnimationController textFadeControl;
@@ -184,7 +184,7 @@ class _AccessScreen extends State<AccessScreen>
                     labelText: 'Senha',
                     labelStyle: const TextStyle(
                       fontSize: 14,
-                      color: Color(0xffFFFFFF),
+                      color: Colors.white,
                       fontFamily: 'RadioCanada',
                       fontWeight: FontWeight.w600,
                     ),

@@ -8,7 +8,6 @@ class FadeSlideText extends StatefulWidget {
     required this.text,
     required this.controller,
     required this.textStyle,
-    // this.duration = const Duration(milliseconds: 700),
     this.delay = Duration.zero,
     this.curve = Curves.easeOut,
   });
@@ -16,7 +15,6 @@ class FadeSlideText extends StatefulWidget {
   final String text;
   final TextStyle textStyle;
   final AnimationController controller;
-  // final Duration duration;
   final Duration delay;
   final Curve curve;
 
@@ -25,18 +23,12 @@ class FadeSlideText extends StatefulWidget {
 }
 
 class _FadeSlideTextState extends State<FadeSlideText> with SingleTickerProviderStateMixin {
-  // late AnimationController widgetcontroller;
   late Animation<double> _opacity;
   late Animation<Offset> _slide;
-  // late String _displayText;
 
   @override
   void initState() {
     super.initState();
-    // _displayText = widget.text;
-
-    // _controller = AnimationController(vsync: this, duration: widget.duration);
-
     _opacity = CurvedAnimation(parent: widget.controller, curve: widget.curve)
         .drive(Tween(begin: 0.0, end: 1.0));
 
@@ -49,14 +41,6 @@ class _FadeSlideTextState extends State<FadeSlideText> with SingleTickerProvider
       widget.controller.forward();
     }
   }
-
-  /// Método público para trocar texto e reiniciar animação
-  // void setTextAndRestart(String newText) {
-  //   setState(() {
-  //     _displayText = newText;
-  //   });
-  //   widget.controller.forward(from: 0.0);
-  // }
 
   @override
   void dispose() {
