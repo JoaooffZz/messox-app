@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messox_app/presentation/components/notification/time.dart';
-import '../ui/button_svg.dart';
-import '../ui/lottie.dart';
+import '../buttons/button_svg.dart';
+import '../animations/lottie.dart';
 
 
 class NotificationSystemSucess extends StatefulWidget{

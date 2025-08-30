@@ -28,6 +28,13 @@ class System {
         ? User.fromJson(Map<String, dynamic>.from(json['user']))
         : null,
   );
+
+  factory System.newSystem() => System(
+    theme: 'dark', 
+    language: 'en-us', 
+    server: null, 
+    user: null
+  );
 }
 
 class User {

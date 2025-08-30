@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../components/double_toggle_carousel.dart';
+import '../../components/ui/double_toggle_carousel.dart';
 import 'bottom_nav_home.dart';
 
 class HomeScreen extends StatefulWidget {

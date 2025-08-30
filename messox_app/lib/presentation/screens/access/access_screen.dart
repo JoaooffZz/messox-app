@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:messox_app/presentation/components/buttons/button.dart';
+import 'package:messox_app/presentation/components/ui/form.dart';
 
-// import '../../../core/colors/colors_acess_screen.dart';
-import '../../components/double_toggle_carousel.dart';
+import '../../../core/colors/immutable/acess.dart';
+import '../../components/ui/double_toggle_carousel.dart';
 import 'animated_weight_text.dart';
-import '../../components/ui/fade_text.dart';
-import '../../components/button_go.dart';
-import '../../components/form_acess.dart';
+import '../../components/animations/fade_text.dart';
 
 class AccessScreen extends StatefulWidget {
   const AccessScreen({super.key});
@@ -18,15 +18,17 @@ class AccessScreen extends StatefulWidget {
 class _AccessScreen extends State<AccessScreen>
     with SingleTickerProviderStateMixin {
   // final colors = ColorsAccessScreen;
+  // bool _enabledForm = false;
   bool _isLogin = true;
+  bool _ignoring = false;
 
   late AnimationController textFadeControl;
 
-  late GlobalKey<FormState> formKeyUser;
-  late TextEditingController formUsercontrol;
+  late GlobalKey<FormState> keyUser;
+  late TextEditingController controlUser;
 
-  late GlobalKey<FormState> formKeyPassword;
-  late TextEditingController formPasswordcontrol;
+  late GlobalKey<FormState> keyPassword;
+  late TextEditingController controlPassword;
 
   void _changeAcess() {
     setState(() {
@@ -42,11 +44,11 @@ class _AccessScreen extends State<AccessScreen>
         vsync: this, duration: const Duration(milliseconds: 700));
 
     // form user
-    formKeyUser = GlobalKey<FormState>();
-    formUsercontrol = TextEditingController();
+    keyUser = GlobalKey<FormState>();
+    controlUser = TextEditingController();
     // form password
-    formKeyPassword = GlobalKey<FormState>();
-    formPasswordcontrol = TextEditingController();
+    keyPassword = GlobalKey<FormState>();
+    controlPassword = TextEditingController();
 
     super.initState();
   }
@@ -142,52 +144,38 @@ class _AccessScreen extends State<AccessScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  FormAcess(
-                    height: heightMQ * 0.08,
-                    width: widthMQ * 0.9,
-                    formKey: formKeyUser,
-                    controller: formUsercontrol,
+                  FormCustom(
+                    formKey: keyUser, 
+                    controller: controlUser, 
                     svg: SvgPicture.asset(
                       _isLogin
-                          ? 'assets/svgs/user.svg'
-                          : 'assets/svgs/user-add.svg',
-                      height: 28,
-                      width: 28,
-                    ),
-                    colorForm: _isLogin
-                        ? const Color(0xff797780)
-                        : const Color(0xff5C5B5F),
-                    colorBoxShadow: const Color(0xff444446),
-                    labelText: 'Usuario',
-                    labelStyle: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xffFFFFFF),
-                      fontFamily: 'RadioCanada',
-                      fontWeight: FontWeight.w600,
-                    ),
+                      ? 'assets/svgs/user.svg'
+                      : 'assets/svgs/user-add.svg',
+                      width: 24, height: 24,
+                    ), 
+                    labelText: 'Usuario', 
+                    background: _isLogin
+                      ? AcessColors.backgroundFormLogin
+                      : AcessColors.backgroundFormRegister, 
+                    shadow: const Color.fromARGB(255, 9, 9, 22), 
+                    ignoring: _ignoring, 
+                    isRequired: true
                   ),
                   const SizedBox(height: 20),
-                  FormAcess(
-                    height: heightMQ * 0.08,
-                    width: widthMQ * 0.9,
-                    formKey: formKeyPassword,
-                    controller: formPasswordcontrol,
+                  FormCustom(
+                    formKey: keyPassword, 
+                    controller: controlPassword, 
                     svg: SvgPicture.asset(
                       'assets/svgs/password.svg',
-                      height: 28,
-                      width: 28,
-                    ),
-                    colorForm: _isLogin
-                        ? const Color(0xff797780)
-                        : const Color(0xff5C5B5F),
-                    colorBoxShadow: const Color(0xff444446),
-                    labelText: 'Senha',
-                    labelStyle: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontFamily: 'RadioCanada',
-                      fontWeight: FontWeight.w600,
-                    ),
+                      width: 24, height: 24,
+                    ), 
+                    labelText: 'Senha', 
+                    background: _isLogin
+                      ? AcessColors.backgroundFormLogin
+                      : AcessColors.backgroundFormRegister, 
+                    shadow: AcessColors.shadowForm, 
+                    ignoring: _ignoring, 
+                    isRequired: true
                   ),
                 ],
               ),
@@ -218,21 +206,16 @@ class _AccessScreen extends State<AccessScreen>
 
             const SizedBox(height: 25),
 
-            ButtonGo(
-              height: heightMQ * 0.07,
-              width: widthMQ * 0.5,
-              colorBrightBackground: _isLogin
-                  ? const Color(0xff444446).withOpacity(0.5)
-                  : const Color(0xff262527).withOpacity(0.5),
-              text: _isLogin ? 'Prosseguir' : 'Registrar',
-              style: const TextStyle(
-                fontSize: 20,
-                color: Color(0xff3C3C3D),
-                fontFamily: 'RadioCanada',
-                fontWeight: FontWeight.w600,
-              ),
-              onTap: () => {},
-            ),
+            ButtonCustom(
+              shadow: _isLogin
+              ? AcessColors.shadowButtonLogin
+              : AcessColors.shadowButtonRegister, 
+              text: _isLogin
+              ? 'Prosseguir'
+              : 'Registrar', 
+              onTap: () => {}, 
+              ignoring: _ignoring
+            )
           ],
         ),
       ),

@@ -3,10 +3,11 @@ import 'package:hive/hive.dart';
 import 'package:messox_app/core/constants/name_boxes.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'presentation/providers/caches/theme.dart';
 import 'presentation/providers/caches/system.dart';
 import 'presentation/providers/connections/web_socket_provider.dart';
 import 'presentation/screens/access/access_screen.dart';
-import 'presentation/screens/form_server/form_server_screen.dart';
+import 'presentation/screens/server_form/server_form_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/screens/home/home_screen.dart';
@@ -23,6 +24,7 @@ void main() async{
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SystemCacheProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeCacheProvider()),
         ChangeNotifierProvider(create: (_) => WebSocketProvider()),
       ],
       child: const MyApp()
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: AccessScreen(),
-      // home: FormServerScreen()
+      // home: ServerFormScreen()
       // home: PreLoading()
     );
   }

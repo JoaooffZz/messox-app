@@ -1,0 +1,38 @@
+{
+    "screens": {
+        "server_form": {
+            "forms": {
+                "name": "Nome",
+                "host": "Host",
+                "scheme": "Schema",
+                "api_key": "Api key"
+            },
+            "bottom": "Connectar",
+            "introduction": {
+                "one": "Preencha os dados",
+                "two": "do servidor"
+            } 
+        },
+        "access": {
+            "carousel":{
+                "login": "Entrar",
+                "register": "Registrar"
+            },
+            "introduction": {
+                "one_login": "Bem vindo Usuario",
+                "two_login": "Insira suas credencias de acesso",
+                "one_register": "Bem vindo novo\nusuario",
+                "two_register": "Crie suas credencias de acesso"
+            },
+            "form": {
+                "user": "Usuario",
+                "password": "Senha"
+            },
+            "change_server": "alterar servidor",
+            "bottom": {
+                "login": "Prosseguir",
+                "register": "Registrar"
+            }
+        }
+    }
+}

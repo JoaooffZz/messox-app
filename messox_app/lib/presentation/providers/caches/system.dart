@@ -16,14 +16,13 @@ class SystemCacheProvider with ChangeNotifier {
 
   Future<void> run() async{
     if (isInitialized) return;
-    _system = await GetSystem.get();
     isInitialized = true;
-  }
-
-  void upSystem(System newSystem) {
-    if (!isInitialized) return;
-    _system = newSystem;
-    return;
+    final s = await GetSystem.get();
+    if (s == null) {
+      _system = System.newSystem();
+      return;
+    }
+    _system = s;
   }
 
   void upTheme(String them) {
@@ -50,5 +49,13 @@ class SystemCacheProvider with ChangeNotifier {
     );
     
     notifyListeners();
+  }
+
+  void upUser() {
+
+  }
+
+  void upServer() {
+
   }
 }

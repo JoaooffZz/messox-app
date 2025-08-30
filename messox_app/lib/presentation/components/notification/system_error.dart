@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:messox_app/presentation/components/notification/time.dart';
-import '../ui/button_svg.dart';
-import '../ui/container_rotate.dart';
-import '../ui/lottie.dart';
+import '../buttons/button_svg.dart';
+import '../animations/container_rotate.dart';
+import '../animations/lottie.dart';
 
 
 class NotificationSystemError extends StatefulWidget{

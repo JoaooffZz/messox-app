@@ -20,7 +20,7 @@ class NotificationDemoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff65FFBB),
+      backgroundColor: Color(0xff262626),
       // appBar: AppBar(title: const Text("Demo Notification")),
       body: Center(
         child: ElevatedButton(
@@ -69,7 +69,7 @@ void _error(BuildContext context) {
   );
 
   final time = 10;
-  final textPreview = Colors.white;
+  final textPreview = Color(0xfffe6b72);
   final background = const Color(0xff444446);
   final boxContent = const Color(0xffD0D0D1);
   final backgroundTime = const Color(0xffAFAEB2);
@@ -98,11 +98,11 @@ void _sucess(BuildContext context) {
     context, 
     'Conexão estabelecida', 
     3, 
-    Colors.black, 
-    Colors.white, 
+    Color(0xff65ffbb), 
+    Color(0xff444446), 
+    Color(0xffAFAEB2), 
+    Color(0xffF5F5F6), 
     Color(0xffE6E6E7), 
-    Colors.black.withOpacity(0.6), 
-    Color(0xff77767B), 
-    Colors.black.withOpacity(0.3)
+    Colors.black.withOpacity(0.5)
   );
 }

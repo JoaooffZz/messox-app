@@ -2,19 +2,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../components/ui/fade_text.dart';
-import '../../components/form_acess.dart';
-import '../../components/button_go.dart';
+import '../../../core/colors/immutable/server_form.dart';
+import '../../components/buttons/button.dart';
+import '../../components/animations/fade_text.dart';
+import '../../components/ui/form.dart';
 
-class FormServerScreen extends StatefulWidget {
-  const FormServerScreen({super.key});
+class ServerFormScreen extends StatefulWidget {
+  const ServerFormScreen({super.key});
 
   @override
-  State<FormServerScreen> createState() => _FormServerScreen();
+  State<ServerFormScreen> createState() => _ServerFormScreen();
 }
 
-class _FormServerScreen extends State<FormServerScreen>
+class _ServerFormScreen extends State<ServerFormScreen>
     with SingleTickerProviderStateMixin {
+
   late AnimationController textFadeControl;
 
   late GlobalKey<FormState> keyName;
@@ -29,11 +31,13 @@ class _FormServerScreen extends State<FormServerScreen>
   late GlobalKey<FormState> keyApiKey;
   late TextEditingController controlApiKey;
 
+  bool _ignoring = false;
+
   @override
   void initState() {
     // fade text
     textFadeControl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2000));
+        vsync: this, duration: const Duration(milliseconds: 900));
 
     // form name server
     keyName = GlobalKey<FormState>();
@@ -56,7 +60,6 @@ class _FormServerScreen extends State<FormServerScreen>
 
   @override
   Widget build(BuildContext context) {
-    final widthMQ = MediaQuery.of(context).size.width;
     final heightMQ = MediaQuery.of(context).size.height;
     final viewInsets = MediaQuery.of(context).viewInsets.bottom;
 
@@ -105,40 +108,46 @@ class _FormServerScreen extends State<FormServerScreen>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _form(
-                    heightMQ * 0.08,
-                    widthMQ * 0.9,
-                    'assets/svgs/server.svg',
-                    'Nome *',
-                    keyName,
-                    controlName,
+                    SvgPicture.asset(
+                      'assets/svgs/server.svg',
+                      width: 24, height: 24,
+                    ), 
+                    'Nome', 
+                    true, 
+                    keyName, 
+                    controlName
                   ),
                   const SizedBox(height: 20),
                   _form(
-                    heightMQ * 0.08,
-                    widthMQ * 0.9,
-                    'assets/svgs/host.svg',
-                    'Host *',
-                    keyHost,
-                    controlHost,
+                    SvgPicture.asset(
+                      'assets/svgs/host.svg',
+                      width: 24, height: 24,
+                    ), 
+                    'Host', 
+                    true, 
+                    keyHost, 
+                    controlHost
                   ),
                   const SizedBox(height: 20),
                   _form(
-                    heightMQ * 0.08,
-                    widthMQ * 0.9,
-                    'assets/svgs/schema.svg',
-                    'Schema *',
-                    keySchema,
-                    controlSchema,
+                    SvgPicture.asset(
+                      'assets/svgs/schema.svg'
+                    ), 
+                    'Schema', 
+                    true, 
+                    keySchema, 
+                    controlSchema
                   ),
                   const SizedBox(height: 20),
                   _form(
-                    heightMQ * 0.08,
-                    widthMQ * 0.9,
-                    'assets/svgs/api-key.svg',
-                    'Api-key',
-                    keyApiKey,
-                    controlApiKey,
-                  ),
+                    SvgPicture.asset(
+                      'assets/svgs/api-key.svg'
+                    ), 
+                    'Api key', 
+                    false, 
+                    keyApiKey, 
+                    controlApiKey
+                  )
                 ],
               ),
             ),
@@ -146,17 +155,16 @@ class _FormServerScreen extends State<FormServerScreen>
             SizedBox(height: heightMQ * 0.12),
 
             SafeArea(
-              child: ButtonGo(
-                height: heightMQ * 0.07,
-                width: widthMQ * 0.5,
-                colorBrightBackground: const Color(0xff3C3C3D),
+              child:ButtonCustom(
+                ignoring: _ignoring,
                 text: 'Connectar',
-                style: const TextStyle(
-                    fontSize: 20,
-                    color: Color(0xff3C3C3D),
-                    fontFamily: 'RadioCanada',
-                    fontWeight: FontWeight.w600),
-                onTap: () => {},
+                shadow: ServerFormColors.shadowButton,
+                onTap: () {
+                  setState(() {
+                    _ignoring = !_ignoring;
+                    FocusScope.of(context).unfocus();
+                  });
+                },
               ),
             )
           ],
@@ -165,27 +173,17 @@ class _FormServerScreen extends State<FormServerScreen>
     );
   }
 
-  FormAcess _form(double height, double width, String svg, String name,
-      GlobalKey<FormState> key, TextEditingController control) {
-    return FormAcess(
-      height: height,
-      width: width,
+  FormCustom _form(SvgPicture svg, String labelText, bool isRequired,
+    GlobalKey<FormState> key, TextEditingController control) {
+    return FormCustom(
       formKey: key,
       controller: control,
-      svg: SvgPicture.asset(
-        svg,
-        height: 28,
-        width: 28,
-      ),
-      colorForm: const Color(0xff86868A),
-      colorBoxShadow: const Color(0xff444446),
-      labelText: name,
-      labelStyle: const TextStyle(
-        fontSize: 14,
-        color: Color(0xffFFFFFF),
-        fontFamily: 'RadioCanada',
-        fontWeight: FontWeight.w600,
-      ),
+      svg: svg,
+      labelText: labelText,
+      background: ServerFormColors.backgroundForm,
+      shadow: ServerFormColors.shadowForm,
+      ignoring: _ignoring,
+      isRequired: isRequired,
     );
   }
 }
