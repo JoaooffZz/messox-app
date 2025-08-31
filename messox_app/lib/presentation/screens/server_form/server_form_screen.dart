@@ -1,11 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/colors/immutable/server_form.dart';
+import '../../../core/texts/screens/server_form.dart';
 import '../../components/buttons/button.dart';
 import '../../components/animations/fade_text.dart';
 import '../../components/ui/form.dart';
+import '../../providers/caches/system.dart';
 
 class ServerFormScreen extends StatefulWidget {
   const ServerFormScreen({super.key});
@@ -31,10 +34,14 @@ class _ServerFormScreen extends State<ServerFormScreen>
   late GlobalKey<FormState> keyApiKey;
   late TextEditingController controlApiKey;
 
+  late ServerFormTexts _serverFormTexts;
+
   bool _ignoring = false;
 
   @override
   void initState() {
+    _serverFormTexts = context.read<SystemCacheProvider>()
+      .dataLanguage!.screensTexts.serverFormTexts;
     // fade text
     textFadeControl = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 900));
@@ -74,10 +81,10 @@ class _ServerFormScreen extends State<ServerFormScreen>
           children: [
             SafeArea(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   FadeSlideText(
-                    text: 'Preencha os dados',
+                    text: _serverFormTexts.introduction.one,
                     controller: textFadeControl,
                     textStyle: const TextStyle(
                       color: Color(0xff262527),
@@ -87,7 +94,7 @@ class _ServerFormScreen extends State<ServerFormScreen>
                     ),
                   ),
                   FadeSlideText(
-                    text: 'do servidor',
+                    text: _serverFormTexts.introduction.two,
                     controller: textFadeControl,
                     textStyle: const TextStyle(
                       color: Color(0xff262527),
@@ -112,7 +119,7 @@ class _ServerFormScreen extends State<ServerFormScreen>
                       'assets/svgs/server.svg',
                       width: 24, height: 24,
                     ), 
-                    'Nome', 
+                    _serverFormTexts.forms.name, 
                     true, 
                     keyName, 
                     controlName
@@ -123,7 +130,7 @@ class _ServerFormScreen extends State<ServerFormScreen>
                       'assets/svgs/host.svg',
                       width: 24, height: 24,
                     ), 
-                    'Host', 
+                    _serverFormTexts.forms.host, 
                     true, 
                     keyHost, 
                     controlHost
@@ -133,7 +140,7 @@ class _ServerFormScreen extends State<ServerFormScreen>
                     SvgPicture.asset(
                       'assets/svgs/schema.svg'
                     ), 
-                    'Schema', 
+                    _serverFormTexts.forms.scheme, 
                     true, 
                     keySchema, 
                     controlSchema
@@ -143,7 +150,7 @@ class _ServerFormScreen extends State<ServerFormScreen>
                     SvgPicture.asset(
                       'assets/svgs/api-key.svg'
                     ), 
-                    'Api key', 
+                    _serverFormTexts.forms.apiKey, 
                     false, 
                     keyApiKey, 
                     controlApiKey
@@ -157,7 +164,7 @@ class _ServerFormScreen extends State<ServerFormScreen>
             SafeArea(
               child:ButtonCustom(
                 ignoring: _ignoring,
-                text: 'Connectar',
+                text: _serverFormTexts.button,
                 shadow: ServerFormColors.shadowButton,
                 onTap: () {
                   setState(() {

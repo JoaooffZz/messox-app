@@ -1,14 +1,20 @@
-class RequestError implements Exception{
-  final String message;
-  RequestError({required this.message});
+abstract class ApiCustomErros implements Exception{}
+
+class RequestError extends ApiCustomErros{
+  final int code;
+  final String? message;
+  RequestError({
+    required this.code,
+    this.message
+  });
 }
 
-class ConnectionServerError implements Exception{
+class ConnectionServerError extends ApiCustomErros{
   final String message;
   ConnectionServerError({required this.message});
 }
 
-class TimeOutRequestError implements Exception{
+class TimeOutRequestError extends ApiCustomErros{
   final String message;
   TimeOutRequestError({
     required this.message

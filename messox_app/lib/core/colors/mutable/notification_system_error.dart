@@ -2,6 +2,7 @@ import 'dart:ui';
 
 class NotificationSystemErrorTheme {
   final Color textPreview;
+  final Color textContent;
   final Color background;
   final Color boxContent;
   final Color backgroundTime;
@@ -12,6 +13,7 @@ class NotificationSystemErrorTheme {
   NotificationSystemErrorTheme({
     required this.textPreview,
     required this.textTime,
+    required this.textContent,
     required this.shadow,
     required this.backgroundTime,
     required this.actions,

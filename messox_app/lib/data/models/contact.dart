@@ -1,13 +1,15 @@
-class ProfileChat {
+class Contact {
   final int id;
-  final String name;
-  final String profile;
-  final String? lastMessage;
+  String name;
+  String profile;
+  String? bio;
+  String? lastMessage;
 
-  ProfileChat({
+  Contact({
     required this.id,
     required this.name,
     required this.profile,
+    required this.bio,
     required this.lastMessage
   });
 
@@ -15,13 +17,15 @@ class ProfileChat {
     'id': id,
     'name': name,
     'profile': profile,
+    'bio': bio,
     'lastMessage': lastMessage,
   };
 
-  factory ProfileChat.fromJson(Map<String, dynamic> json) => ProfileChat(
+  factory Contact.fromJson(Map<String, dynamic> json) => Contact(
     id: json['id'] as int,
     name: json['name'] as String,
     profile: json['profile'] as String,
+    bio: json['bio'] as String?,
     lastMessage: json['lastMessage'] as String?,
   );
 }

@@ -1,5 +1,4 @@
-
-import '../../data/models/system.dart';
+import '../../data/models/system/server.dart';
 import '../api/headers/headers.dart';
 import '../api/https/get.dart';
 import '../api/uris/get.dart';

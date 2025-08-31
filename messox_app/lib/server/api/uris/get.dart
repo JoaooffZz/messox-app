@@ -1,4 +1,4 @@
-import '../../../data/models/system.dart';
+import '../../../data/models/system/server.dart';
 
 class UriGet {
   static Uri ping(Server server) {

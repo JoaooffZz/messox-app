@@ -5,12 +5,12 @@
                 "name": "Name",
                 "host": "Host",
                 "scheme": "Scheme",
-                "api_key": "Api Key"
+                "api_key": "API Key"
             },
-            "bottom": "Connect",
+            "button": "Connect",
             "introduction": {
-                "one": "Fill in the",
-                "two": "server data"
+                "one": "Fill in the data",
+                "two": "of the server"
             } 
         },
         "access": {
@@ -21,17 +21,30 @@
             "introduction": {
                 "one_login": "Welcome User",
                 "two_login": "Enter your access credentials",
-                "one_register": "Welcome New\nUser",
+                "one_register": "Welcome new\nuser",
                 "two_register": "Create your access credentials"
             },
             "form": {
-                "user": "Username",
+                "user": "User",
                 "password": "Password"
             },
-            "change_server": "Change Server",
-            "bottom": {
+            "change_server": "change server",
+            "buttons": {
                 "login": "Continue",
                 "register": "Register"
+            }
+        }
+    },
+    "notifications": {
+        "error_request": {
+            "preview": "request error",
+            "content": {
+                "body": "The server did not respond with the expected code",
+                "code": "received code:"
+            },
+            "close": {
+                "first": "this message will close in ",
+                "last": " seconds."
             }
         }
     }

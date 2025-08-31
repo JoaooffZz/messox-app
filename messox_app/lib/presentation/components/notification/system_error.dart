@@ -14,26 +14,26 @@ class NotificationSystemError extends StatefulWidget{
     required this.preview,
     required this.content,
     required this.time,
-    required this.textPreview,
+    required this.textPreviewColor,
     required this.background,
-    required this.boxContent,
-    required this.backgroundTime,
-    required this.textTime,
-    required this.actions,
-    required this.shadow
+    required this.boxContentColor,
+    required this.backgroundTimeColor,
+    required this.textTimeColor,
+    required this.actionsColor,
+    required this.shadowColor
   });
   
   final OverlayEntry entry;
   final String preview;
   final DefaultTextStyle content;
   final int time;
-  final Color textPreview;
+  final Color textPreviewColor;
   final Color background;
-  final Color boxContent;
-  final Color backgroundTime;
-  final Color textTime;
-  final Color actions;
-  final Color shadow;
+  final Color boxContentColor;
+  final Color backgroundTimeColor;
+  final Color textTimeColor;
+  final Color actionsColor;
+  final Color shadowColor;
 
   static void show(BuildContext context, 
     String preview, DefaultTextStyle content, int time, 
@@ -48,13 +48,13 @@ class NotificationSystemError extends StatefulWidget{
           preview: preview,
           content: content,
           time: time,
-          textPreview: textPreview,
+          textPreviewColor: textPreview,
           background: background,
-          boxContent: boxContent,
-          backgroundTime: backgroundTime,
-          textTime: textTime,
-          actions: actions,
-          shadow: shadow,
+          boxContentColor: boxContent,
+          backgroundTimeColor: backgroundTime,
+          textTimeColor: textTime,
+          actionsColor: actions,
+          shadowColor: shadow,
         ),
       );
       overlay.insert(entry);
@@ -194,7 +194,7 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
           const SizedBox(width: 10),
           DefaultTextStyle(
             style: TextStyle(
-              color: widget.textPreview,
+              color: widget.textPreviewColor,
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.w600
@@ -210,7 +210,7 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
               width: 24,
               onTap: _arrow,
               svg: 'assets/svgs/angle-down.svg',
-              color: widget.actions,
+              color: widget.actionsColor,
             ),
           ),
           const SizedBox(width: 10),
@@ -219,7 +219,7 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
             height: 30, 
             onTap: _event, 
             svg: 'assets/svgs/exit.svg', 
-            color: widget.actions
+            color: widget.actionsColor
           ),
           const SizedBox(width: 10)
         ],
@@ -243,7 +243,7 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
               ? Container(
                   key: const ValueKey(1),
                   decoration: BoxDecoration(
-                    color: widget.boxContent,
+                    color: widget.boxContentColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   alignment: Alignment.center,
@@ -259,14 +259,14 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
       height: heightMQ * 0.030,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: widget.backgroundTime,
+        color: widget.backgroundTimeColor,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(15), 
           bottomRight: Radius.circular(15)
         ),
         boxShadow: [
           BoxShadow(
-            color: widget.shadow,
+            color: widget.shadowColor,
             blurRadius: 2,
             offset: Offset(0, 4)
           )
@@ -279,7 +279,7 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
             alignment: Alignment(-0.6, -0.8),
             child: DefaultTextStyle(
               style: TextStyle(
-                color: widget.textTime,
+                color: widget.textTimeColor,
                 fontFamily: 'Poppins',
                 fontSize: 10,
                 fontWeight: FontWeight.w400,

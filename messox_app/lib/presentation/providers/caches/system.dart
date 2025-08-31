@@ -1,61 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:messox_app/data/models/system/settings.dart';
 
-import '../../../data/models/system.dart';
-import '../../../data/services/get/get_system.dart';
+import '../../../core/language/data.dart';
+import '../../../data/models/system/server.dart';
+import '../../../data/models/system/user.dart';
+import '../../../data/services/get/box_system.dart';
 
 class SystemCacheProvider with ChangeNotifier {
-  bool isInitialized = false;
-
-  late System? _system;
-  
-  System? get system => _system;
-  String get theme => _system!.theme;
-  String get language => _system!.language;
-  User get user => _system!.user!;
-  Server get server => _system!.server!;
+  Settings? settings;
+  User? user;
+  Server? server;
+  DataLanguage? dataLanguage;
 
   Future<void> run() async{
-    if (isInitialized) return;
-    isInitialized = true;
-    final s = await GetSystem.get();
-    if (s == null) {
-      _system = System.newSystem();
+    settings = await GetBoxSystem.getSettings();
+
+    if(settings == null) {
+      settings = Settings.New();
+      upLanguage(settings!.language);
       return;
     }
-    _system = s;
+    upLanguage(settings!.language);
+
+    server = await GetBoxSystem.getServer();
+    if(server == null) return;
+
+    user = await GetBoxSystem.getUser();
   }
 
-  void upTheme(String them) {
-    if (!isInitialized) return;
+  void upServer(Server s) => server = s;
 
-    _system = System(
-      theme: them,
-      language: _system!.language,
-      server: _system!.server,
-      user: _system!.user,
-    );
+  void upUser(User u) => user = u; 
 
+  void upTheme(String t) {
+    settings!.theme = t;
     notifyListeners();
   }
 
-  void upLanguage(String lang) {
-    if (!isInitialized) return;
-
-    _system = System(
-      theme: _system!.theme,
-      language: lang,
-      server: _system!.server,
-      user: _system!.user,
-    );
-    
+  Future<void> upLanguage(String l) async{
+    settings!.language = l;
+    dataLanguage = await DataLanguage.build(l);
     notifyListeners();
-  }
-
-  void upUser() {
-
-  }
-
-  void upServer() {
-
   }
 }

@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 
 import '../../../core/colors/immutable/pre_loading.dart';
 import '../../../core/constants/lottie_fox.dart';
-import '../../blocs/pre_loading/pre_loading_bloc.dart';
-import '../../blocs/pre_loading/pre_loading_events.dart';
-import '../../blocs/pre_loading/pre_loading_state.dart';
+import '../../blocs/pre_loading/bloc.dart';
+import '../../blocs/pre_loading/events.dart';
+import '../../blocs/pre_loading/state.dart';
 import '../../providers/caches/system.dart';
 import '../../routes/pre_loading.dart';
 import 'transparent_loop_animation.dart';
@@ -37,16 +37,15 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
 
       await context.read<SystemCacheProvider>().run();
 
-      // context.read<ThemeCacheProvider>().upTheme(
-      //   context.read<SystemCacheProvider>().theme
-      // );
-      // _colors = context.read<ThemeCacheProvider>().preLoadingColors;
-
       lottieFox = LottieFox().get();
       _setupAnimationController();
 
       _preLoadBloc.inputEvent.add(
-        PreInitSystem(system: context.read<SystemCacheProvider>().system)
+        PreInitSystem(
+          settings: context.read<SystemCacheProvider>().settings!,
+          user: context.read<SystemCacheProvider>().user,
+          server: context.read<SystemCacheProvider>().server,
+        )
       );
     });
   }

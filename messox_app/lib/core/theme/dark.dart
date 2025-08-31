@@ -17,11 +17,12 @@ class Dark {
     notificationSystemErrorTheme: NotificationSystemErrorTheme(
       textPreview: Color(0xffFE6B72),
       textTime: Color(0xffF5F5F6),
+      textContent: Color(0xff000000),
       shadow: Color(0xff000000).withOpacity(0.5),
       actions: Color(0xffE6E6E7),
       background: Color(0xff444446),
       backgroundTime: Color(0xffAFAEB2),
-      boxContent: Color(0xffD0D0D1)
+      boxContent: Color(0xff868686)
     ), 
     notificationSystemSucessTheme: NotificationSystemSucessTheme(
       actions: Color(0xffE6E6E7),

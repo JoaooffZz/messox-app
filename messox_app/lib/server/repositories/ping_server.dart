@@ -27,7 +27,7 @@ class RepositoryPingServer {
       case 401:
         return false;
       default:
-        throw RequestError(message: 'status-code: ${resp.statusCode}, not expected');
+        throw RequestError(code: resp.statusCode);
     }
   }
 }

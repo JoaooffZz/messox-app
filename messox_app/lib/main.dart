@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:messox_app/core/constants/name_boxes.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'core/constants/boxes/system.dart';
 import 'presentation/providers/caches/theme.dart';
 import 'presentation/providers/caches/system.dart';
 import 'presentation/providers/connections/web_socket_provider.dart';
@@ -18,7 +18,7 @@ void main() async{
 
   final dir = await getApplicationDocumentsDirectory();
   Hive.init(dir.path);
-  await Hive.openBox(NameBoxes.boxSystem);
+  await Hive.openBox(ConstsBoxSystem.boxName);
 
   runApp(
     MultiProvider(
@@ -59,9 +59,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: AccessScreen(),
+      // home: AccessScreen(),
       // home: ServerFormScreen()
-      // home: PreLoading()
+      home: PreLoading()
     );
   }
 }

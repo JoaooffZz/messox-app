@@ -5,9 +5,9 @@
                 "name": "Nome",
                 "host": "Host",
                 "scheme": "Schema",
-                "api_key": "Api key"
+                "api_key": "API key"
             },
-            "bottom": "Connectar",
+            "button": "Connectar",
             "introduction": {
                 "one": "Preencha os dados",
                 "two": "do servidor"
@@ -29,9 +29,22 @@
                 "password": "Senha"
             },
             "change_server": "alterar servidor",
-            "bottom": {
+            "buttons": {
                 "login": "Prosseguir",
                 "register": "Registrar"
+            }
+        }
+    },
+    "notifications": {
+        "error_request": {
+            "preview": "erro na requisição",
+            "content": {
+                "body": "O servidor não respondeu com o código esperado",
+                "code": "código recebido:"
+            },
+            "close": {
+                "first": "esta mensagem será fechada em ",
+                "last": " segundos."
             }
         }
     }

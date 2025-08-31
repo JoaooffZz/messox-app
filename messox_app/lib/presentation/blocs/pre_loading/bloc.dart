@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import '../../../core/constants/curiosities_fox.dart';
-import 'pre_loading_events.dart';
-import 'pre_loading_state.dart';
+import 'events.dart';
+import 'state.dart';
 
 class PreLoadingBloc {
   final StreamController<PreLoadingEvents> _inputEventController = StreamController<PreLoadingEvents>();
@@ -17,20 +17,13 @@ class PreLoadingBloc {
   void _mapEventToState(PreLoadingEvents event) async {
 
     if(event is PreInitSystem) {
-      if(event.system == null) {
-        _primaryAcess();
-        return;
-      }
-      if (event.system != null) {
-        _notPrimaryAcess(event.system!.language);
-      }
+      _loaded(event.settings.language);
 
-      if(event.system!.server == null) {
+      if (event.server == null) {
         _serverNotFound();
         return;
       }
-
-      if(event.system!.user == null) {
+      if (event.user == null) {
         _userNotFound();
         return;
       }
@@ -38,28 +31,18 @@ class PreLoadingBloc {
       _initUserHome();
     }    
   }
-  
-  void _primaryAcess() {
-    final cur = CuriositiesFox(language: 'en-us');
-    _outputStateController.add(Loaded(curiositiesFoxGet: cur.get));
-    Future.delayed(Duration(milliseconds: 3000)).then((_) {
-      _outputStateController.add(GoServer());
-    });
-  }
-
-  void _notPrimaryAcess(String language) {
+  void _loaded(String language) {
     final cur = CuriositiesFox(language: language);
     _outputStateController.add(Loaded(curiositiesFoxGet: cur.get));
   }
 
   void _serverNotFound() {
-    Future.delayed(Duration(milliseconds: 3000)).then((_) {
+    Future.delayed(Duration(milliseconds: 1500)).then((_) {
       _outputStateController.add(GoServer());
     });
   }
-
   void _userNotFound() {
-    Future.delayed(Duration(milliseconds: 2500)).then((_) {
+    Future.delayed(Duration(milliseconds: 1500)).then((_) {
       _outputStateController.add(GoAcess());
     });
   }
