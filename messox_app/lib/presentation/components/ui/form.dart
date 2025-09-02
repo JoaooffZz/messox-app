@@ -6,6 +6,7 @@ class FormCustom extends StatefulWidget {
     super.key,
     required this.formKey,
     required this.controller,
+    required this.focusNode,
     required this.svg,
     required this.labelText,
     required this.background,
@@ -16,6 +17,7 @@ class FormCustom extends StatefulWidget {
 
   final GlobalKey<FormState> formKey;
   final TextEditingController controller;
+  final FocusNode focusNode;
   final SvgPicture svg;
   final String labelText;
   final Color background;
@@ -31,6 +33,7 @@ class _FormAcess extends State<FormCustom> {
    
   @override
   Widget build(BuildContext context) {
+
     // aplica transparência se ignoring = true
     final Color background = widget.ignoring
         ? widget.background.withOpacity(0.7)
@@ -88,6 +91,7 @@ class _FormAcess extends State<FormCustom> {
             child: TextFormField(
               showCursor: !widget.ignoring,
               controller: widget.controller,
+              focusNode: widget.focusNode,
               maxLines: 1,
               textInputAction: TextInputAction.done,
               textAlign: TextAlign.start,

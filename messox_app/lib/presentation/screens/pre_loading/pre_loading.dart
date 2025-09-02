@@ -4,7 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/colors/immutable/pre_loading.dart';
-import '../../../core/constants/lottie_fox.dart';
+import '../../../core/constants/pre_loading/lottie_fox.dart';
 import '../../blocs/pre_loading/bloc.dart';
 import '../../blocs/pre_loading/events.dart';
 import '../../blocs/pre_loading/state.dart';
@@ -122,12 +122,12 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
           TransparentLoopAnimation(
             controller: _controller,
             height: heightMQ * 0.12,
-            width: widthMQ * 0.8,
+            width: double.infinity,
             duration: const Duration(seconds: 1),
             child: DefaultTextStyle(
               style: TextStyle(
                 fontFamily: 'RadioCanada',
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w500,
                 color: PreLoadingColors.text,
               ), 
@@ -142,7 +142,7 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
   void _setupAnimationController() {
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 450),
+      duration: const Duration(milliseconds: 350),
     );
 
     _controller.addStatusListener((status) {
@@ -161,9 +161,9 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
   }
 
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _controller.dispose();
+  //   super.dispose();
+  // }
 }

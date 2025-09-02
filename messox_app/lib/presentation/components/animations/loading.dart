@@ -3,24 +3,24 @@ import 'package:lottie/lottie.dart';
 
 import '../ui/glass_panel.dart';
 
-class Loading extends StatefulWidget {
-  const Loading({super.key});
+class LoadingDialog extends StatefulWidget {
+  const LoadingDialog({super.key});
 
   static void show(BuildContext context) {
     showDialog(
       context: context,
       barrierColor: Colors.transparent, // deixa transparente atrás
       builder: (context) {
-        return Loading();
+        return LoadingDialog();
       },
     );
   }
 
   @override
-  State<Loading> createState() => _LoadingState();
+  State<LoadingDialog> createState() => _LoadingDialogState();
 }
 
-class _LoadingState extends State<Loading> {
+class _LoadingDialogState extends State<LoadingDialog> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +28,7 @@ class _LoadingState extends State<Loading> {
       body: GlassPanel(
         width: double.infinity,
         height: double.infinity,
-        blurSigma: 25,
+        blurSigma: 1.5,
         opacity: 0.15,
         borderOpacity: 0.15,
         child: Center(
@@ -42,7 +42,6 @@ class _LoadingState extends State<Loading> {
             alignment: Alignment.center,
             child: LottieBuilder.asset(
               'assets/lotties/loading.json',
-              // repeat: true,
               fit: BoxFit.cover,
             ),
           ),

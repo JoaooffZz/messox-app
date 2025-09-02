@@ -5,16 +5,16 @@ import 'package:flutter/services.dart';
 import '../texts/notifications/notifications_texts.dart';
 import '../texts/screens/screens_texts.dart';
 
-class DataLanguage {
+class LanguageData {
   final ScreensTexts screensTexts;
   final NotificationsTexts notificationsTexts;
 
-  DataLanguage({
+  LanguageData({
     required this.notificationsTexts,
     required this.screensTexts
   });
 
-  static Future<DataLanguage> build(String language) async {
+  static Future<LanguageData> build(String language) async {
     late Map<String, dynamic> json;
     switch(language) {
       case 'pt-br':
@@ -23,7 +23,7 @@ class DataLanguage {
         json = await _loadLocale('en-us');
     }
 
-    return DataLanguage._fromJson(json);
+    return LanguageData._fromJson(json);
   }
 
   static Future<Map<String, dynamic>> _loadLocale(String localeCode) async {
@@ -36,9 +36,9 @@ class DataLanguage {
     return jsonMap;
   }
 
-  factory DataLanguage._fromJson(Map<String, dynamic> json) {
+  factory LanguageData._fromJson(Map<String, dynamic> json) {
     print('${json}');
-    return DataLanguage(
+    return LanguageData(
       notificationsTexts: NotificationsTexts.fromJson(json['notifications']), 
       screensTexts: ScreensTexts.fromJson(json['screens'])
     );

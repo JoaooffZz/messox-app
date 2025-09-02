@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:messox_app/data/models/system/settings.dart';
 
 import '../../../core/language/data.dart';
+import '../../../core/theme/data.dart';
 import '../../../data/models/system/server.dart';
 import '../../../data/models/system/user.dart';
 import '../../../data/services/get/box_system.dart';
@@ -10,16 +11,19 @@ class SystemCacheProvider with ChangeNotifier {
   Settings? settings;
   User? user;
   Server? server;
-  DataLanguage? dataLanguage;
+  LanguageData? languageData;
+  ThemeData themeData = ThemeData();
 
   Future<void> run() async{
     settings = await GetBoxSystem.getSettings();
 
     if(settings == null) {
       settings = Settings.New();
+      upTheme(settings!.theme);
       upLanguage(settings!.language);
       return;
     }
+    upTheme(settings!.theme);
     upLanguage(settings!.language);
 
     server = await GetBoxSystem.getServer();
@@ -34,12 +38,13 @@ class SystemCacheProvider with ChangeNotifier {
 
   void upTheme(String t) {
     settings!.theme = t;
+    themeData.upTheme(t);
     notifyListeners();
   }
 
   Future<void> upLanguage(String l) async{
     settings!.language = l;
-    dataLanguage = await DataLanguage.build(l);
+    languageData = await LanguageData.build(l);
     notifyListeners();
   }
 }

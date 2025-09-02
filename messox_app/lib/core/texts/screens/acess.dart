@@ -19,7 +19,7 @@ class AccessTexts {
       introduction: Introduction.fromJson(json['introduction'] ?? {}),
       form: Form.fromJson(json['form'] ?? {}),
       changeServer: json['change_server'] ?? '',
-      bottom: Buttons.fromJson(json['bottom'] ?? {}),
+      bottom: Buttons.fromJson(json['buttons'] ?? {}),
     );
   }
 }

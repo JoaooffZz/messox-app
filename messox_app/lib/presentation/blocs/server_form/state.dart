@@ -6,14 +6,10 @@ class Loading extends ServerFormState{
 
 }
 
-class Loaded extends ServerFormState{
-  
-}
-
 class Error extends ServerFormState{
-  final ApiCustomErros apiCustomError;
+  final ApiCustomErros error;
 
-  Error({required this.apiCustomError});
+  Error({required this.error});
 }
 
 class Sucess extends ServerFormState{

@@ -16,18 +16,23 @@ class RepositoryPingServer {
   }); 
 
   Future<bool> request()async{
-    final resp = await RunWithTimeout.run(
-      () => client.get(uri: uri, headers: headers), 
-      const Duration(seconds: maxTime)
-    );
+    // throw RequestError(code: 500);
+    await Future.delayed(const Duration(milliseconds: 5000));
+    return true;
+    await Future.delayed(const Duration(milliseconds: 5000));
+    throw RequestError(code: 500);
+    // final resp = await RunWithTimeout.run(
+    //   () => client.get(uri: uri, headers: headers), 
+    //   const Duration(seconds: maxTime)
+    // );
 
-    switch(resp.statusCode) {
-      case 200:
-        return true;
-      case 401:
-        return false;
-      default:
-        throw RequestError(code: resp.statusCode);
-    }
+    // switch(resp.statusCode) {
+    //   case 200:
+    //     return true;
+    //   case 401:
+    //     return false;
+    //   default:
+    //     throw RequestError(code: resp.statusCode);
+    // }
   }
 }

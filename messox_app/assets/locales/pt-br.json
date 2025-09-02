@@ -36,15 +36,22 @@
         }
     },
     "notifications": {
+        "close": {
+            "first": "esta mensagem será fechada em ",
+            "last": " segundos."
+        },
         "error_request": {
             "preview": "erro na requisição",
             "content": {
                 "body": "O servidor não respondeu com o código esperado",
                 "code": "código recebido:"
-            },
-            "close": {
-                "first": "esta mensagem será fechada em ",
-                "last": " segundos."
+            }
+        },
+        "not_auth": {
+            "preview": "não autorizado",
+            "content": {
+                "body": "As credencias inseridas constam com divergencia ou vencimento",
+                "warning": "insira as credencias corretas"
             }
         }
     }

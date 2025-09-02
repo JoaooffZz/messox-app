@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../../../core/constants/curiosities_fox.dart';
+import '../../../core/constants/pre_loading/curiosities_fox.dart';
 import 'events.dart';
 import 'state.dart';
 
@@ -37,12 +37,12 @@ class PreLoadingBloc {
   }
 
   void _serverNotFound() {
-    Future.delayed(Duration(milliseconds: 1500)).then((_) {
+    Future.delayed(Duration(milliseconds: 2050)).then((_) {
       _outputStateController.add(GoServer());
     });
   }
   void _userNotFound() {
-    Future.delayed(Duration(milliseconds: 1500)).then((_) {
+    Future.delayed(Duration(milliseconds: 2100)).then((_) {
       _outputStateController.add(GoAcess());
     });
   }

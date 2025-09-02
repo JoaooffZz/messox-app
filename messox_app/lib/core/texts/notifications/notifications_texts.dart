@@ -1,15 +1,19 @@
-import 'error_request.dart';
+import 'not_auth.dart';
+import 'request_error.dart';
 
 class NotificationsTexts {
-  final ErrorRequestTexts errorRequestTexts;
+  final RequestErrorTexts requestErrorTexts;
+  final NotAuthTexts notAuthTexts;
 
   NotificationsTexts({
-    required this.errorRequestTexts
+    required this.requestErrorTexts,
+    required this.notAuthTexts
   });
 
   factory NotificationsTexts.fromJson(dynamic json) {
     return NotificationsTexts(
-      errorRequestTexts: ErrorRequestTexts.fromJson(json['error_request'])
+      requestErrorTexts: RequestErrorTexts.fromJson(json),
+      notAuthTexts: NotAuthTexts.fromJson(json)
     );
   }
 }

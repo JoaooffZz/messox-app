@@ -5,12 +5,12 @@
                 "name": "Name",
                 "host": "Host",
                 "scheme": "Scheme",
-                "api_key": "API Key"
+                "api_key": "API key"
             },
             "button": "Connect",
             "introduction": {
-                "one": "Fill in the data",
-                "two": "of the server"
+                "one": "Fill in the",
+                "two": "server details"
             } 
         },
         "access": {
@@ -36,15 +36,22 @@
         }
     },
     "notifications": {
+        "close": {
+            "first": "this message will close in ",
+            "last": " seconds."
+        },
         "error_request": {
             "preview": "request error",
             "content": {
                 "body": "The server did not respond with the expected code",
                 "code": "received code:"
-            },
-            "close": {
-                "first": "this message will close in ",
-                "last": " seconds."
+            }
+        },
+        "not_auth": {
+            "preview": "not authorized",
+            "content": {
+                "body": "The entered credentials have discrepancies or are expired",
+                "warning": "enter the correct credentials"
             }
         }
     }

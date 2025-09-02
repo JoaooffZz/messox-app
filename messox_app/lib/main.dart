@@ -24,7 +24,7 @@ void main() async{
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SystemCacheProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeCacheProvider()),
+        // ChangeNotifierProvider(create: (_) => ThemeCacheProvider()),
         ChangeNotifierProvider(create: (_) => WebSocketProvider()),
       ],
       child: const MyApp()
