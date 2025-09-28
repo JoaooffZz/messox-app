@@ -12,6 +12,10 @@ class NotificationSystemError extends StatefulWidget{
     super.key,
     required this.entry,
     required this.preview,
+    this.lottie = 'assets/lotties/error.json',
+    this.timeColor = const Color(0xffFE6B72),
+    required this.textTimeFirst,
+    required this.textTimeLast,
     required this.content,
     required this.time,
     required this.textPreviewColor,
@@ -22,9 +26,13 @@ class NotificationSystemError extends StatefulWidget{
     required this.actionsColor,
     required this.shadowColor
   });
-  
+
+  final String lottie;
+  final Color timeColor;
   final OverlayEntry entry;
   final String preview;
+  final String textTimeFirst;
+  final String textTimeLast;
   final DefaultTextStyle content;
   final int time;
   final Color textPreviewColor;
@@ -36,7 +44,7 @@ class NotificationSystemError extends StatefulWidget{
   final Color shadowColor;
 
   static void show(BuildContext context, 
-    String preview, DefaultTextStyle content, int time, 
+    String preview, String textTimeFirst, textTimeLast, DefaultTextStyle content, int time, 
     Color textPreview, Color background, Color boxContent,
     Color backgroundTime, Color textTime, Color actions, Color shadow) {
       final overlay = Overlay.of(context);
@@ -46,6 +54,8 @@ class NotificationSystemError extends StatefulWidget{
         builder: (context) => NotificationSystemError(
           entry: entry, 
           preview: preview,
+          textTimeFirst: textTimeFirst,
+          textTimeLast: textTimeLast,
           content: content,
           time: time,
           textPreviewColor: textPreview,
@@ -160,7 +170,7 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 _preview(heightMQ * 0.05),
-                _content(heightMQ * 0.10),
+                _content(heightMQ * 0.12),
                 _time(heightMQ, widthMQ),
               ],
             ),
@@ -185,10 +195,10 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           const SizedBox(width: 10),
-          Lottie(
+          LottieCustom(
             height: 26,
             width: 26,
-            lottie: 'assets/lotties/error.json',
+            asset: widget.lottie,
             repeat: false,
           ),
           const SizedBox(width: 10),
@@ -284,7 +294,8 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
                 fontSize: 10,
                 fontWeight: FontWeight.w400,
               ),
-              child: Text('this message will close in ${widget.time} seconds.'),
+              child: Text(widget.textTimeFirst+'${widget.time}'+widget.textTimeLast),
+              // child: Text('this message will close in ${widget.time} seconds.'),
             ),
           ),
           Align(
@@ -293,7 +304,7 @@ class _SystemState extends State<NotificationSystemError> with TickerProviderSta
               controller: _timeNotification, 
               height: 4,
               width: widthMQ * 0.9,
-              color: Color(0xffFE6B72), 
+              color: widget.timeColor, 
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(2),
                 bottomRight: Radius.circular(2)

@@ -7,7 +7,7 @@ import '../../../data/models/system/server.dart';
 import '../../../data/models/system/user.dart';
 import '../../../data/services/get/box_system.dart';
 
-class SystemCacheProvider with ChangeNotifier {
+class ProviderCacheSystem with ChangeNotifier {
   Settings? settings;
   User? user;
   Server? server;

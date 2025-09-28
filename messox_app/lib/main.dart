@@ -3,7 +3,6 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'core/constants/boxes/system.dart';
-import 'presentation/providers/caches/theme.dart';
 import 'presentation/providers/caches/system.dart';
 import 'presentation/providers/connections/web_socket_provider.dart';
 import 'presentation/screens/access/access_screen.dart';
@@ -23,7 +22,7 @@ void main() async{
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SystemCacheProvider()),
+        ChangeNotifierProvider(create: (_) => ProviderCacheSystem()),
         // ChangeNotifierProvider(create: (_) => ThemeCacheProvider()),
         ChangeNotifierProvider(create: (_) => WebSocketProvider()),
       ],

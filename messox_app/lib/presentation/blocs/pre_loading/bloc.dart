@@ -20,7 +20,7 @@ class PreLoadingBloc {
       _loaded(event.settings.language);
 
       if (event.server == null) {
-        _serverNotFound();
+        await _serverNotFound();
         return;
       }
       if (event.user == null) {
@@ -33,18 +33,17 @@ class PreLoadingBloc {
   }
   void _loaded(String language) {
     final cur = CuriositiesFox(language: language);
-    _outputStateController.add(Loaded(curiositiesFoxGet: cur.get));
+    _outputStateController.add(Loaded(curiosities: cur.get()));
   }
 
-  void _serverNotFound() {
-    Future.delayed(Duration(milliseconds: 2050)).then((_) {
-      _outputStateController.add(GoServer());
-    });
+  Future<void> _serverNotFound() async{
+    await Future.delayed(Duration(milliseconds: 8000));
+    _outputStateController.add(GoServer());
   }
   void _userNotFound() {
-    Future.delayed(Duration(milliseconds: 2100)).then((_) {
-      _outputStateController.add(GoAcess());
-    });
+    // Future.delayed(Duration(milliseconds: 2100)).then((_) {
+    //   _outputStateController.add(GoAcess());
+    // });
   }
 
   void _initUserHome() {

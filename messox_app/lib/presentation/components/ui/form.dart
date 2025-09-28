@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 class FormCustom extends StatefulWidget {
@@ -6,6 +7,7 @@ class FormCustom extends StatefulWidget {
     super.key,
     required this.formKey,
     required this.controller,
+    this.validator,
     required this.focusNode,
     required this.svg,
     required this.labelText,
@@ -17,6 +19,7 @@ class FormCustom extends StatefulWidget {
 
   final GlobalKey<FormState> formKey;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
   final FocusNode focusNode;
   final SvgPicture svg;
   final String labelText;
@@ -30,39 +33,63 @@ class FormCustom extends StatefulWidget {
 }
 
 class _FormAcess extends State<FormCustom> {
-   
-  @override
-  Widget build(BuildContext context) {
 
-    // aplica transparência se ignoring = true
-    final Color background = widget.ignoring
-        ? widget.background.withOpacity(0.7)
-        : widget.background;
+  bool _isError = false;
+  String err = "";
+  late Color background;
+  late Color shadow;
+  late Color required;
+  late Color borderColor;
+  late Color labelColor;
+  late Color textColor;
+  late Color cursorColor;
+  
 
-    final Color shadow = widget.ignoring
+  void _setError(String e) {
+    shadow = Color(0xffFE6B72);
+    borderColor = Color(0xffFF0000);
+    err = e;
+    setState(() {_isError = true;});
+  }
+  void _upError() {
+    shadow = widget.shadow;
+    borderColor = Color(0xff00F977);
+    err = "";
+    setState(() {_isError = false;});
+  }
+  @override initState(){
+    super.initState();
+    background = widget.ignoring
+      ? widget.background.withOpacity(0.7)
+      : widget.background;
+
+    shadow = widget.ignoring
         ? widget.shadow.withOpacity(0.2)
         : widget.shadow;
     
-    final Color required = widget.ignoring
+    required = widget.ignoring
         ? Color(0xfffe6b72).withOpacity(0.5)
         : Color(0xfffe6b72);
 
-    final Color borderColor = widget.ignoring
+    borderColor = widget.ignoring
         ? const Color(0xff00F977).withOpacity(0.7)
         : const Color(0xff00F977);
 
-    final Color labelColor = widget.ignoring
+    labelColor = widget.ignoring
         ? const Color(0xffFFFFFF).withOpacity(0.7)
         : const Color(0xffFFFFFF);
 
-    final Color textColor = widget.ignoring
+    textColor = widget.ignoring
         ? Colors.white.withOpacity(0.7)
         : Colors.white;
 
-    final Color cursorColor = widget.ignoring
+    cursorColor = widget.ignoring
         ? Colors.white.withOpacity(0.7)
         : Colors.white;
-
+  }
+   
+  @override
+  Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       curve: Curves.decelerate,
@@ -85,10 +112,24 @@ class _FormAcess extends State<FormCustom> {
         ],
       ),
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Form(
             key: widget.formKey,
             child: TextFormField(
+            validator: (val) {
+                if (widget.validator == null) return null;
+                final err = widget.validator!(val);
+                if (err != null) {
+                  _setError(err);
+                  return null;
+                }
+                if(_isError) _upError();
+                return null;
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp(r'\s')),
+              ],
               showCursor: !widget.ignoring,
               controller: widget.controller,
               focusNode: widget.focusNode,
@@ -125,17 +166,9 @@ class _FormAcess extends State<FormCustom> {
                   padding: const EdgeInsets.all(10),
                   child: widget.svg,
                 ),
-                errorStyle: TextStyle(
-                  color: Colors.red[400],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[400]!, width: 1.5),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red[500]!, width: 2.0),
-                ),
+                errorStyle: TextStyle(height: 0, color: Colors.transparent), // oculta texto
+                errorBorder: InputBorder.none,       // sem borda vermelha
+                focusedErrorBorder: InputBorder.none // sem borda vermelha quando focado
               ),
             ),
           ),
@@ -159,7 +192,29 @@ class _FormAcess extends State<FormCustom> {
                   fontSize: 18
                 ),
               )
-            )
+            ),
+          if(_isError)
+            TweenAnimationBuilder<Offset>(
+              tween: Tween<Offset>(
+                begin: const Offset(0, -20),   // posição inicial (normal)
+                end: const Offset(0, -30),   // posição final (acima)
+              ),
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+              builder: (context, offset, child) {
+                return Transform.translate(
+                  offset: offset,
+                  child: child,
+                );
+              },
+              child: Text(
+                err,
+                style: const TextStyle(
+                  color: Color(0xffE60026),
+                  fontSize: 14,
+                ),
+              ),
+            ),
         ],
       ),
     );

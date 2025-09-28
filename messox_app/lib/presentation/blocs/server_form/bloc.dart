@@ -1,10 +1,12 @@
+library serverFormBloc;
+
 import 'dart:async';
 import '../../../data/models/system/server.dart';
-import '../../../data/services/put/box_system.dart';
-import '../../../server/erros/api.dart';
-import '../../../server/services/connection_auth_server.dart';
-import 'events.dart';
-import 'state.dart';
+import '../../../server/exceptions/api.dart';
+import '../../../server/services/connection_server.dart';
+
+part 'state.dart';
+part 'events.dart';
 
 class ServerFormBloc {
   final StreamController<ServerFormEvents> _inputEventController = StreamController<ServerFormEvents>();
@@ -25,7 +27,7 @@ class ServerFormBloc {
       );
 
       try {
-        final bool isAuth = await ConnectionAuthServer(server: server).auth();
+        final bool isAuth = await ServiceConnectionServer(server: server).auth();
         if (isAuth) {
           // event.upCacheServer(server);
           // await PutBoxSystem.tableServer.up(server);
@@ -34,10 +36,11 @@ class ServerFormBloc {
         }
         _outputStateController.add(NotAuth());
         return;
-      }on ApiCustomErros catch(e){
-        _outputStateController.add(Error(error: e));
+      }on ApiCustomExceptions catch(e){
+        _outputStateController.add(ApiExceptions(error: e));
         return;
       }catch(e){
+        print('\nBUG -> $e');
         // debugar
       }
     }

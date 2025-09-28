@@ -144,10 +144,10 @@ class _SystemState extends State<NotificationSystemSucess> with TickerProviderSt
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           const SizedBox(width: 10),
-          Lottie(
+          LottieCustom(
             height: 26,
             width: 26,
-            lottie: 'assets/lotties/ok.json',
+            asset: 'assets/lotties/ok.json',
             repeat: false,
           ),
           const SizedBox(width: 10),

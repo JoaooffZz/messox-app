@@ -11,7 +11,19 @@
             "introduction": {
                 "one": "Fill in the",
                 "two": "server details"
-            } 
+            },
+            "mixins": {
+                "scheme": {
+                    "not_empty": "this field is required",
+                    "not_http": "(http) or (https)"
+                },
+                "name": {
+                    "not_empty": "this field is required"
+                },
+                "host": {
+                    "not_empty": "this field is required"
+                }
+            }
         },
         "access": {
             "carousel": {
@@ -52,6 +64,13 @@
             "content": {
                 "body": "The entered credentials have discrepancies or are expired",
                 "warning": "enter the correct credentials"
+            }
+        },
+        "time_out": {
+            "preview": "time out",
+            "content": {
+                "body": "The server response time has been exceeded",
+                "warning": "check your internet connection or wait"
             }
         }
     }

@@ -1,4 +1,4 @@
-import '../../../server/erros/api.dart';
+part of 'bloc.dart';
 
 abstract class ServerFormState{}
 
@@ -6,10 +6,10 @@ class Loading extends ServerFormState{
 
 }
 
-class Error extends ServerFormState{
-  final ApiCustomErros error;
+class ApiExceptions extends ServerFormState{
+  final ApiCustomExceptions error;
 
-  Error({required this.error});
+  ApiExceptions({required this.error});
 }
 
 class Sucess extends ServerFormState{

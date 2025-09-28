@@ -86,6 +86,7 @@ flutter:
     - assets/lotties/error.json
     - assets/lotties/ok.json
     - assets/lotties/loading.json
+    - assets/lotties/warning.json
     # locales
     - assets/locales/en-us.json
     - assets/locales/pt-br.json

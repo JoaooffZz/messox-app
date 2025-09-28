@@ -3,7 +3,7 @@ import 'server_form.dart';
 
 class ScreensTexts {
   final AccessTexts accessTexts;
-  final ServerFormTexts serverFormTexts;
+  final Texts serverFormTexts;
 
   ScreensTexts({
     required this.accessTexts,
@@ -13,7 +13,7 @@ class ScreensTexts {
   factory ScreensTexts.fromJson(dynamic json) {
     return ScreensTexts(
       accessTexts: AccessTexts.fromJson(json['access']),
-      serverFormTexts: ServerFormTexts.fromJson(json['server_form'])
+      serverFormTexts: Texts.fromJson(json['server_form'])
     );
   }
 }

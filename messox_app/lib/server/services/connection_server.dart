@@ -2,26 +2,28 @@ import '../../data/models/system/server.dart';
 import '../api/headers/headers.dart';
 import '../api/https/get.dart';
 import '../api/uris/get.dart';
-import '../repositories/ping_server.dart';
+import '../repositories/connection_server_repository.dart';
 
-class ConnectionAuthServer {
+class ServiceConnectionServer {
   final Server server;
   
-  ConnectionAuthServer({
+  ServiceConnectionServer({
     required this.server
   });
 
   Future<bool> auth()async{
+    print('SERVICE CHAMADO');
     final uri = UriGet.ping(server);
-    final headers = Headers.get(server.apiKey);
+    final headers = Headers.toNoType(server.apiKey);
     final client = HttpGet();
 
-    final repo = RepositoryPingServer(
+    final repo = RepositoryConnectionServer(
       client: client,
       uri: uri,
       headers: headers,
     );
+    final isAuth = await repo.request();
 
-    return await repo.request();
+    return isAuth;
   }
 }

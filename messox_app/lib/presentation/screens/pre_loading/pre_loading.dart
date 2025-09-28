@@ -4,13 +4,15 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/colors/immutable/pre_loading.dart';
+// import '../../../core/constants/pre_loading/curiosities_fox.dart';
 import '../../../core/constants/pre_loading/lottie_fox.dart';
 import '../../blocs/pre_loading/bloc.dart';
 import '../../blocs/pre_loading/events.dart';
 import '../../blocs/pre_loading/state.dart';
+import '../../components/animations/staggered_text_animation.dart';
 import '../../providers/caches/system.dart';
 import '../../routes/pre_loading.dart';
-import 'transparent_loop_animation.dart';
+// import 'transparent_loop_animation.dart';
 
 class PreLoading extends StatefulWidget{
   const PreLoading({super.key});
@@ -21,13 +23,10 @@ class PreLoading extends StatefulWidget{
 
 class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
   bool isLoaded = false;
-  late final String Function() curiositiesFoxGet;
-  String curiosityFox = '';
+  List<String> curiositiesFox = [];
   late String lottieFox;
-  late AnimationController _controller;
 
   late final PreLoadingBloc _preLoadBloc;
-  // late final PreLoadingColors _colors;
 
   @override
   void initState() {
@@ -35,16 +34,15 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
     _preLoadBloc = PreLoadingBloc();
     Future.microtask(() async {
 
-      await context.read<SystemCacheProvider>().run();
+      await context.read<ProviderCacheSystem>().run();
 
       lottieFox = LottieFox().get();
-      _setupAnimationController();
 
       _preLoadBloc.inputEvent.add(
         PreInitSystem(
-          settings: context.read<SystemCacheProvider>().settings!,
-          user: context.read<SystemCacheProvider>().user,
-          server: context.read<SystemCacheProvider>().server,
+          settings: context.read<ProviderCacheSystem>().settings!,
+          user: context.read<ProviderCacheSystem>().user,
+          server: context.read<ProviderCacheSystem>().server,
         )
       );
     });
@@ -78,7 +76,7 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
 
         if (state is Loaded && !isLoaded) {
           isLoaded = true;
-          curiositiesFoxGet = state.curiositiesFoxGet;
+          curiositiesFox = state.curiosities;
         }
 
         if (isLoaded) {
@@ -119,51 +117,17 @@ class _PreLoading extends State<PreLoading> with TickerProviderStateMixin{
               repeat: true,
             ),
           ),
-          TransparentLoopAnimation(
-            controller: _controller,
-            height: heightMQ * 0.12,
-            width: double.infinity,
-            duration: const Duration(seconds: 1),
-            child: DefaultTextStyle(
-              style: TextStyle(
-                fontFamily: 'RadioCanada',
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: PreLoadingColors.text,
-              ), 
-              child: Text(curiosityFox),
+          StaggeredTextAnimation(
+            textStyle: TextStyle(
+              color: PreLoadingColors.text,
+              fontSize: 18,
+              fontWeight: FontWeight.w500
             ),
-          ),
+            texts: curiositiesFox,
+            duration: Duration(milliseconds: 1200),
+          )
         ],
       ),
     );
   }
-
-  void _setupAnimationController() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 350),
-    );
-
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reverse(); // vai para trás
-      } else if (status == AnimationStatus.dismissed) {
-        _controller.forward(); // vai para frente
-        // curiosityFox = curiositiesFoxGet();
-        setState(() {
-          curiosityFox = curiositiesFoxGet();
-        });
-      }
-    });
-
-    _controller.forward();
-  }
-
-
-  // @override
-  // void dispose() {
-  //   _controller.dispose();
-  //   super.dispose();
-  // }
 }

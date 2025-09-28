@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import '../texts/notifications/notifications_texts.dart';
+import '../texts/notifications/texts_notification.dart';
 import '../texts/screens/screens_texts.dart';
 
 class LanguageData {
-  final ScreensTexts screensTexts;
-  final NotificationsTexts notificationsTexts;
+  final ScreensTexts textsScreens;
+  final TextsNotifications textsNotifications;
 
   LanguageData({
-    required this.notificationsTexts,
-    required this.screensTexts
+    required this.textsNotifications,
+    required this.textsScreens
   });
 
   static Future<LanguageData> build(String language) async {
@@ -39,8 +39,8 @@ class LanguageData {
   factory LanguageData._fromJson(Map<String, dynamic> json) {
     print('${json}');
     return LanguageData(
-      notificationsTexts: NotificationsTexts.fromJson(json['notifications']), 
-      screensTexts: ScreensTexts.fromJson(json['screens'])
+      textsNotifications: TextsNotifications.fromJson(json['notifications']), 
+      textsScreens: ScreensTexts.fromJson(json['screens'])
     );
   }
 }

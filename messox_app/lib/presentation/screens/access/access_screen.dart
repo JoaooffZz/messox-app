@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:messox_app/presentation/components/buttons/button.dart';
-import 'package:messox_app/presentation/components/ui/form.dart';
 import 'package:provider/provider.dart';
+import '../../../server/exceptions/api.dart';
+import '../../blocs/access/bloc.dart' as bloc;
 
 import '../../../core/colors/immutable/acess.dart';
 import '../../../core/colors/mutable/notification_system_error.dart';
-import '../../../core/texts/notifications/notifications_texts.dart';
+import '../../../core/texts/notifications/texts_notification.dart';
 import '../../../core/texts/screens/acess.dart';
+import '../../components/animations/loading.dart';
+import '../../components/buttons/button.dart';
 import '../../components/ui/double_toggle_carousel.dart';
+import '../../components/ui/form.dart';
+import '../../components/ui/notification_api_erros.dart';
 import '../../providers/caches/system.dart';
 import 'animated_weight_text.dart';
 import '../../components/animations/fade_text.dart';
@@ -34,24 +38,29 @@ class _AccessScreen extends State<AccessScreen> with SingleTickerProviderStateMi
   
   // settings notification:
   late NotificationSystemErrorTheme _notificationTheme;
-  late NotificationsTexts _notificationsTexts;
+  late TextsNotifications _notificationsTexts;
   
   // settings screen:
   late AccessTexts _accessTexts;
+  late final bloc.AcessBloc _bloc;
   
   // states locale:
   bool _isLogin = true;
-  bool _ignoring = false;
+  bool _isIgnoring = false;
+  bool _isLoading = false;
+  late bloc.AcessState? _lastState;
 
   @override
   void initState() {
-    _accessTexts =  context.read<SystemCacheProvider>()
-      .languageData!.screensTexts.accessTexts;
+    _bloc = bloc.AcessBloc();
 
-    _notificationsTexts = context.read<SystemCacheProvider>()
-      .languageData!.notificationsTexts;
+    _accessTexts =  context.read<ProviderCacheSystem>()
+      .languageData!.textsScreens.accessTexts;
 
-    _notificationTheme = context.read<SystemCacheProvider>()
+    _notificationsTexts = context.read<ProviderCacheSystem>()
+      .languageData!.textsNotifications;
+
+    _notificationTheme = context.read<ProviderCacheSystem>()
       .themeData.notificationSystemErrorTheme;
 
     // fade text
@@ -75,11 +84,54 @@ class _AccessScreen extends State<AccessScreen> with SingleTickerProviderStateMi
     textFadeControl.forward(from: 0.0);
   }
 
+  void _clearFocus() {
+    _focusUser.unfocus();
+    _focusPassword.unfocus();
+  }
+  void _ignoring() {
+    if(_isIgnoring) _clearFocus();
+  }
+
   @override
   Widget build(BuildContext context) {
     final widthMQ = MediaQuery.of(context).size.width;
     final heightMQ = MediaQuery.of(context).size.height;
 
+    return StreamBuilder<bloc.AcessState>(
+      stream: _bloc.outputState,
+      builder: (context, snapshot){
+        final state = snapshot.data;
+        if(state is bloc.Loading && !_isLoading) {
+          _isLoading = true; _lastState = state;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            LoadingDialog.show(context);
+          });
+        }
+        if(state is! bloc.Loading && _isLoading) {
+          _isLoading = false;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pop(context);
+          });
+        }
+
+        if(state is bloc.Error && state != _lastState) {
+          _lastState = state;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _ignoring();
+            NotificationsApiErrors.show(context, 
+              _notificationTheme, 
+              _notificationsTexts, 
+              state.error
+            );
+          });
+        }
+
+        return _body(heightMQ, widthMQ);
+      },
+    );
+  }
+
+  Widget _body(double heightMQ, double widthMQ) {
     return AnimatedContainer(
       padding: EdgeInsets.only(left: 7, right: 7, top: 25),
       duration: const Duration(milliseconds: 600),
@@ -179,7 +231,7 @@ class _AccessScreen extends State<AccessScreen> with SingleTickerProviderStateMi
                       ? AcessColors.backgroundFormLogin
                       : AcessColors.backgroundFormRegister, 
                     shadow: const Color.fromARGB(255, 9, 9, 22), 
-                    ignoring: _ignoring, 
+                    ignoring: _isIgnoring, 
                     isRequired: true
                   ),
                   const SizedBox(height: 20),
@@ -196,7 +248,7 @@ class _AccessScreen extends State<AccessScreen> with SingleTickerProviderStateMi
                       ? AcessColors.backgroundFormLogin
                       : AcessColors.backgroundFormRegister, 
                     shadow: AcessColors.shadowForm, 
-                    ignoring: _ignoring, 
+                    ignoring: _isIgnoring, 
                     isRequired: true
                   ),
                 ],
@@ -236,7 +288,7 @@ class _AccessScreen extends State<AccessScreen> with SingleTickerProviderStateMi
               ? _accessTexts.bottom.login
               : _accessTexts.bottom.register, 
               onTap: () => {}, 
-              ignoring: _ignoring
+              ignoring: _isIgnoring
             )
           ],
         ),

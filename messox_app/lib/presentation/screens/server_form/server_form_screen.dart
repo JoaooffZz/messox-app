@@ -1,26 +1,31 @@
+library ScreenServerForm;
 
-import 'dart:async';
+// import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:messox_app/core/colors/mutable/notification_system_not_auth.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/colors/immutable/server_form.dart';
 import '../../../core/colors/mutable/notification_system_error.dart';
-import '../../../core/texts/notifications/notifications_texts.dart';
+import '../../../core/texts/notifications/texts_notification.dart';
 import '../../../core/texts/screens/server_form.dart';
-import '../../../server/erros/api.dart';
-import '../../blocs/server_form/bloc.dart';
-import '../../blocs/server_form/events.dart';
-import '../../blocs/server_form/state.dart';
 import '../../components/animations/loading.dart';
+import '../../components/animations/move_fade_in.dart';
 import '../../components/buttons/button.dart';
 import '../../components/animations/fade_text.dart';
-import '../../components/ui/form.dart';
+import '../../components/ui/custom_form_field.dart';
 import '../../components/ui/notification_api_erros.dart';
+import '../../components/ui/notification_not_auth.dart';
 import '../../providers/caches/system.dart';
+import '../../providers/screens/server_form.dart';
 import '../../routes/server_form.dart';
 
+import '../../blocs/server_form/bloc.dart' as bloc;
+import '../../../core/colors/immutable/server_form.dart' as colors;
+import '../../../core/texts/screens/server_form.dart' as texts;
+part './mixins.dart';
 class ServerFormScreen extends StatefulWidget {
   const ServerFormScreen({super.key});
 
@@ -29,100 +34,43 @@ class ServerFormScreen extends StatefulWidget {
 }
 
 class _ServerFormScreen extends State<ServerFormScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController textFadeControl;
-  
-  // settings of forms:
-  final _focusName = FocusNode();
-  late GlobalKey<FormState> keyName;
-  late TextEditingController controlName;
-  
-  final _focusHost = FocusNode();
-  late GlobalKey<FormState> keyHost;
-  late TextEditingController controlHost;
-  
-  final _focusScheme = FocusNode();
-  late GlobalKey<FormState> keyScheme;
-  late TextEditingController controlScheme;
-  
-  final _focusApiKey = FocusNode();
-  late GlobalKey<FormState> keyApiKey;
-  late TextEditingController controlApiKey;
+    with SingleTickerProviderStateMixin, ValidatorFormMixins {
   
   // settings notification:  
-  late NotificationSystemErrorTheme _notificationTheme;
-  late NotificationsTexts _notificationsTexts;
+  late NotificationSystemErrorTheme _notificationErrorTheme;
+  late NotificationSystemNotAuthTheme _notificationNotAuthTheme;
+  late TextsNotifications _notificationsTexts;
   
   // settings screen:
-  late ServerFormTexts _serverFormTexts;
-  late final ServerFormBloc _bloc;
+  late Texts _texts;
+  late void Function() _ignoring;
+  late final bloc.ServerFormBloc _bloc;
 
   
-  // states locale:
-  bool _isIgnoring = false;
+  // locales:
   bool _isLoading = false;
-  late ServerFormState _lastState;
+  bloc.ServerFormState? _lastState;
+
+  late ProviderCacheSystem _providerSystem;
 
   @override
   void initState() {
-    _bloc = ServerFormBloc();
+    _providerSystem = context.read<ProviderCacheSystem>();
+    _bloc = bloc.ServerFormBloc();
 
-    _serverFormTexts = context.read<SystemCacheProvider>()
-      .languageData!.screensTexts.serverFormTexts;
+    _texts = context.read<ProviderCacheSystem>()
+      .languageData!.textsScreens.serverFormTexts;
 
-    _notificationsTexts = context.read<SystemCacheProvider>()
-      .languageData!.notificationsTexts;
+    _notificationsTexts = context.read<ProviderCacheSystem>()
+      .languageData!.textsNotifications;
 
-    _notificationTheme = context.read<SystemCacheProvider>()
+    _notificationErrorTheme = context.read<ProviderCacheSystem>()
       .themeData.notificationSystemErrorTheme;
-
-    // fade text
-    textFadeControl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 900));
-
-    // form name server
-    keyName = GlobalKey<FormState>();
-    controlName = TextEditingController();
-
-    // form host server
-    keyHost = GlobalKey<FormState>();
-    controlHost = TextEditingController();
-
-    // form schema server
-    keyScheme = GlobalKey<FormState>();
-    controlScheme = TextEditingController();
-
-    // form api key
-    keyApiKey = GlobalKey<FormState>();
-    controlApiKey = TextEditingController();
+    
+    _notificationNotAuthTheme = context.read<ProviderCacheSystem>()
+      .themeData.notificationSystemNotAuthTheme;
 
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    textFadeControl.dispose();
-    super.dispose();
-  }
-  
-  void _clearFocus() {
-    _focusApiKey.unfocus();
-    _focusHost.unfocus();
-    _focusName.unfocus();
-    _focusScheme.unfocus();
-  }
-  void _ignoring() {
-    if(_isIgnoring) _clearFocus();
-  }
-  void _event() {
-    _ignoring();
-    _bloc.inputEvent.add(AuthConnection(
-      name: controlName.text,
-      host: controlHost.text,
-      scheme: controlScheme.text,
-      apiKey: controlScheme.text,
-      upCacheServer: context.read<SystemCacheProvider>().upServer
-    ));
   }
 
   @override
@@ -130,191 +78,237 @@ class _ServerFormScreen extends State<ServerFormScreen>
     final heightMQ = MediaQuery.of(context).size.height;
     final viewInsets = MediaQuery.of(context).viewInsets.bottom;
 
-    return StreamBuilder<ServerFormState>(
+    return StreamBuilder<bloc.ServerFormState>(
       stream: _bloc.outputState,
       builder: (context, snapshot) {
         final state = snapshot.data;
-
-        if(state is! Loading && _isLoading) {
-          _isLoading = false;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pop(context);
-          });
-        }
-        if(state is Loading && !_isLoading) {
+        
+        if(state is bloc.Loading && !_isLoading) {
           _isLoading = true; _lastState = state;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             LoadingDialog.show(context);
           });
         }
-
-        if(state is NotAuth && state != _lastState) {
-          _lastState = state;
+        if(state is! bloc.Loading && _isLoading) {
+          _isLoading = false;
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            NotificationApiErros.showNotAuth(
-              context, 
-              _notificationTheme, 
-              _notificationsTexts.notAuthTexts
-            );
+            Navigator.pop(context);
           });
         }
 
-        if(state is Sucess) {
+        if(state is bloc.Sucess) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             RoutesServerForm.goAcess(context);
           });
         }
 
-        if(state is Error && state != _lastState) {
-          _lastState = state;
+        if(state is bloc.ApiExceptions && state != _lastState) {
+          _lastState = state; _ignoring();
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            final error = state.error;
-            _ignoring();
-            switch(error){
-              case RequestError():
-                NotificationApiErros.showRequestError(
-                  context, _notificationTheme, 
-                  _notificationsTexts.requestErrorTexts, 
-                  error.code
-                );
-                break;
-              case ConnectionServerError():
-
-              case TimeOutRequestError():
-            }
+            NotificationsApiErrors.show(context, 
+              _notificationErrorTheme, 
+              _notificationsTexts, 
+              state.error
+            );
           });
         }
 
-        return _body(viewInsets, heightMQ);
+        return ChangeNotifierProvider(
+          create: (context) {
+            final provider = ProviderServerForm();
+            provider.init(this, 
+              _providerSystem
+                .languageData!
+                .textsScreens
+                .serverFormTexts,
+              _bloc.inputEvent.add);
+            _ignoring = provider.ignoring;
+            return provider;
+          },
+          builder: (context, child){
+            return _content(viewInsets, heightMQ);
+          },
+        );
       },
     );
   }
 
-  Widget _body(double viewInsets, double heightMQ) {
-    return GestureDetector(
-      onTap: _clearFocus,
-      child: Container(
-        color: ServerFormColors.background,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 25),
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: viewInsets),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    FadeSlideText(
-                      text: _serverFormTexts.introduction.one,
-                      controller: textFadeControl,
-                      textStyle: const TextStyle(
-                        color: ServerFormColors.textFade,
-                        fontSize: 38,
+  Widget _content(double viewInsets, double heightMQ) {
+    return Consumer<ProviderServerForm>(
+      builder: (context, provider, _) {
+        return GestureDetector(
+          onTap: provider.clearFocus,
+          child: Container(
+            color: colors.background,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 25),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: viewInsets),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top,
+                    ),
+                    child:DefaultTextStyle(
+                      style: TextStyle(
+                        color: colors.textInfo,
                         fontFamily: 'RadioCanada',
                         fontWeight: FontWeight.w700,
                       ),
-                    ),
-                    FadeSlideText(
-                      text: _serverFormTexts.introduction.two,
-                      controller: textFadeControl,
-                      textStyle: const TextStyle(
-                        color: ServerFormColors.textFade,
-                        fontSize: 34,
-                        fontFamily: 'RadioCanada',
-                        fontWeight: FontWeight.w700,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MoveFadeIn(
+                            delay: Duration(milliseconds: 400),
+                            child: Text(
+                              provider.texts.introduction.one,
+                              style: TextStyle(fontSize: 38), // sobrescreve só o tamanho
+                            ),
+                          ),
+                          MoveFadeIn(
+                            delay: Duration(milliseconds: 450),
+                            child: Text(
+                              provider.texts.introduction.two,
+                              style: TextStyle(fontSize: 36), // sobrescreve só o tamanho
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: heightMQ * 0.12),
-
-              Material(
-                color: Colors.transparent,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _form(
-                      SvgPicture.asset(
-                        'assets/svgs/server.svg',
-                        width: 24, height: 24,
-                      ), 
-                      _serverFormTexts.forms.name, 
-                      true, 
-                      keyName, 
-                      controlName,
-                      _focusName
-                    ),
-                    const SizedBox(height: 20),
-                    _form(
-                      SvgPicture.asset(
-                        'assets/svgs/host.svg',
-                        width: 24, height: 24,
-                      ), 
-                      _serverFormTexts.forms.host, 
-                      true, 
-                      keyHost, 
-                      controlHost,
-                      _focusHost
-                    ),
-                    const SizedBox(height: 20),
-                    _form(
-                      SvgPicture.asset(
-                        'assets/svgs/schema.svg'
-                      ), 
-                      _serverFormTexts.forms.scheme, 
-                      true, 
-                      keyScheme, 
-                      controlScheme,
-                      _focusScheme
-                    ),
-                    const SizedBox(height: 20),
-                    _form(
-                      SvgPicture.asset(
-                        'assets/svgs/api-key.svg'
-                      ), 
-                      _serverFormTexts.forms.apiKey, 
-                      false, 
-                      keyApiKey, 
-                      controlApiKey,
-                      _focusApiKey
                     )
-                  ],
-                ),
+                  ),
+
+                  SizedBox(height: heightMQ * 0.12),
+                  _forms(provider),
+                  SizedBox(height: heightMQ * 0.12),
+
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom,
+                    ),
+                    child: ButtonCustom(
+                      ignoring: provider.isIgnoring,
+                      text: provider.texts.button,
+                      shadow: colors.shadowButton,
+                      onTap: provider.event,
+                    ),
+                  ),
+                ],
               ),
-
-              SizedBox(height: heightMQ * 0.12),
-
-              SafeArea(
-                child: ButtonCustom(
-                  ignoring: _isIgnoring,
-                  text: _serverFormTexts.button,
-                  shadow: ServerFormColors.shadowButton,
-                  onTap: _event,
-                ),
-              )
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  FormCustom _form(SvgPicture svg, String labelText, bool isRequired,
-    GlobalKey<FormState> key, TextEditingController control, FocusNode focus) {
-    return FormCustom(
-      formKey: key,
-      controller: control,
-      focusNode: focus,
-      svg: svg,
-      labelText: labelText,
-      background: ServerFormColors.backgroundForm,
-      shadow: ServerFormColors.shadowForm,
-      ignoring: _isIgnoring,
-      isRequired: isRequired,
+  Material _forms(ProviderServerForm provider) {
+    return Material(
+      color: Colors.transparent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Form Name
+          MoveFadeIn(
+            delay: const Duration(milliseconds: 500),
+            child: Form(
+              key: provider.keyName,
+              child: CustomTextFormField(
+                controller: provider.controlName,
+                focusNode: provider.focusName,
+                svg: SvgPicture.asset(
+                  'assets/svgs/server.svg',
+                  width: 24,
+                  height: 24,
+                ),
+                labelText: _texts.forms.name,
+                background: colors.backgroundForm,
+                shadow: colors.shadowForm,
+                ignoring: provider.isIgnoring,
+                isRequired: true,
+                validator: nameValidator(_texts.mixins.name),
+                inputFormatters: provider.inputName,
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+
+          // Form Host
+          MoveFadeIn(
+            delay: const Duration(milliseconds: 600),
+            child: Form(
+              key: provider.keyHost,
+              child: CustomTextFormField(
+                controller: provider.controlHost,
+                focusNode: provider.focusHost,
+                svg: SvgPicture.asset(
+                  'assets/svgs/host.svg',
+                  width: 24,
+                  height: 24,
+                ),
+                labelText: _texts.forms.host,
+                background: colors.backgroundForm,
+                shadow: colors.shadowForm,
+                ignoring: provider.isIgnoring,
+                isRequired: true,
+                validator: hostValidator(_texts.mixins.host),
+                inputFormatters: provider.inputHost,
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+
+          // Form Scheme
+          MoveFadeIn(
+            delay: const Duration(milliseconds: 700),
+            child: Form(
+              key: provider.keyScheme,
+              child: CustomTextFormField(
+                controller: provider.controlScheme,
+                focusNode: provider.focusScheme,
+                svg: SvgPicture.asset(
+                  'assets/svgs/schema.svg',
+                  width: 24,
+                  height: 24,
+                ),
+                labelText: _texts.forms.scheme,
+                background: colors.backgroundForm,
+                shadow: colors.shadowForm,
+                ignoring: provider.isIgnoring,
+                isRequired: true,
+                validator: schemeValidator(_texts.mixins.scheme),
+                inputFormatters: provider.inputScheme,
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+
+          // Form API Key
+          MoveFadeIn(
+            delay: const Duration(milliseconds: 800),
+            child: Form(
+              key: provider.keyApiKey,
+              child: CustomTextFormField(
+                controller: provider.controlApiKey,
+                focusNode: provider.focusApiKey,
+                svg: SvgPicture.asset(
+                  'assets/svgs/api-key.svg',
+                  width: 24,
+                  height: 24,
+                ),
+                labelText: _texts.forms.apiKey,
+                background: colors.backgroundForm,
+                shadow: colors.shadowForm,
+                ignoring: provider.isIgnoring,
+                isRequired: false,
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+        ],
+      ),
     );
   }
 }

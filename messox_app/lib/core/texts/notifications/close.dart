@@ -1,16 +1,13 @@
-class Close {
+part of 'texts_notification.dart';
+
+class TextsClose {
   final String first;
   final String last;
 
-  Close({
-    required this.first,
-    required this.last,
-  });
+  TextsClose({required this.first, required this.last});
 
-  factory Close.fromJson(Map<String, dynamic> json) {
-    return Close(
-      first: json['first'] ?? '',
-      last: json['last'] ?? '',
-    );
-  }
+  factory TextsClose.fromJson(Map<String, dynamic> json) => TextsClose(
+    first: json['first'] ?? '', 
+    last: json['last'] ?? ''
+  );
 }

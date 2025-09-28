@@ -11,6 +11,18 @@
             "introduction": {
                 "one": "Preencha os dados",
                 "two": "do servidor"
+            },
+            "mixins": {
+                "scheme": {
+                    "not_empty": "este campo é obrigatorio",
+                    "not_http": "(http) ou (https)"
+                },
+                "name": {
+                    "not_empty": "este campo é obrigatorio"
+                },
+                "host": {
+                    "not_empty": "este campo é obrigatorio"
+                }
             } 
         },
         "access": {
@@ -40,18 +52,29 @@
             "first": "esta mensagem será fechada em ",
             "last": " segundos."
         },
-        "error_request": {
-            "preview": "erro na requisição",
-            "content": {
-                "body": "O servidor não respondeu com o código esperado",
-                "code": "código recebido:"
-            }
-        },
-        "not_auth": {
-            "preview": "não autorizado",
-            "content": {
-                "body": "As credencias inseridas constam com divergencia ou vencimento",
-                "warning": "insira as credencias corretas"
+        "exceptions": {
+            "api":{
+                "error_request": {
+                    "preview": "erro na requisição",
+                    "messages": ["O Servidor não respondeu como esperado",
+                        "possiveis causas","(estado offlaine, volume alto de requisições)"]
+                },
+                "not_auth": {
+                    "preview": "não autorizado",
+                    "messages": ["As credenciais inseridas constam com divergencia ou vencimento",
+                        "insira as credencias corretas"]
+                },
+                "time_out": {
+                    "preview": "tempo excedido",
+                    "messages": ["O tempo de espera de resposta do servidor foi excedido",
+                        "verifique sua internet ou espere estabilizar"]
+                },
+                "connection_server": {
+                    "preview": "erro de conexão ao servidor",
+                    "messages": ["Não foi possivel estabelecer conexão com o servidor",
+                        "possiveis causas", "(fora do ar, dados incorretos)"]
+                }
+
             }
         }
     }

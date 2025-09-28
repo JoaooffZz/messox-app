@@ -1,8 +1,8 @@
 abstract class PreLoadingState {}
 
 class Loaded extends PreLoadingState{
-  final String Function() curiositiesFoxGet;
-  Loaded({required this.curiositiesFoxGet});
+  final List<String> curiosities;
+  Loaded({required this.curiosities});
 }
 class GoServer extends PreLoadingState{
 }
